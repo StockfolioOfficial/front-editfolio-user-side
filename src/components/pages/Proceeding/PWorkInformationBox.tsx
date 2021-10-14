@@ -6,13 +6,13 @@ interface PWorkInformationProps {
   orderedDatetime: string;
   dudate: string;
   assignee: string;
-  isspin: boolean;
+  isSpin: boolean;
   refresh: () => void;
   spinner: () => void;
 }
 
 interface refresh {
-  isspin: boolean;
+  isSpin: boolean;
 }
 
 const PWorkInformationBox = ({
@@ -20,7 +20,7 @@ const PWorkInformationBox = ({
   dudate,
   assignee,
   refresh,
-  isspin,
+  isSpin,
   spinner,
 }: PWorkInformationProps) => {
   return (
@@ -29,9 +29,9 @@ const PWorkInformationBox = ({
         <Title>작업정보</Title>
         <Refresh>
           <RefreshButton
-            isspin={isspin}
+            isSpin={isSpin}
             onClick={() => {
-              if (isspin) {
+              if (isSpin) {
                 return;
               }
               refresh();
@@ -91,8 +91,8 @@ const rotation = keyframes`
 const Refresh = styled.div``;
 
 const RefreshButton = styled(RefreshSvg)<refresh>`
-  animation: ${({ isspin }) =>
-    isspin &&
+  animation: ${({ isSpin }) =>
+    isSpin &&
     css`
       ${rotation} 0.7s infinite linear
     `};

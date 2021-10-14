@@ -7,7 +7,7 @@ interface SubscriptProps {
   orderedCnt: string;
 }
 
-const PSubscribBox = ({ start, end, orderedCnt }: SubscriptProps) => {
+const PSubscribeBox = ({ start, end, orderedCnt }: SubscriptProps) => {
   return (
     <>
       <SubscribeBox>
@@ -30,7 +30,7 @@ const SubscribeBox = styled.div`
   justify-content: space-between;
   width: 336px;
   height: 40px;
-  margin: 0 12px 0px 12px;
+  margin: 0 12px;
 `;
 
 const Subscribe = styled.div`
@@ -66,4 +66,4 @@ const NumberOfVideoBox = styled.div`
   margin: 16px 24px 0 24px;
   background-color: rgb(238, 239, 249);
 `;
-export default PSubscribBox;
+export default PSubscribeBox;

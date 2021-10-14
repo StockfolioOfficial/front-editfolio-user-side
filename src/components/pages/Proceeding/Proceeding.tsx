@@ -4,7 +4,7 @@ import PBtnBox from './PBtnBox';
 import PLoginBox from './PLoginBox';
 import PNoRequest from './PNoRequest';
 import PNotice from './PNotice';
-import PSubscribBox from './PSubscribBox';
+import PSubscribeBox from './PSubscribeBox';
 import PWorkInformationBox from './PWorkInformationBox';
 import PWorkStatusBox from './PWorkStatusBox';
 
@@ -54,7 +54,7 @@ const Proceeding = () => {
   };
 
   const fetchData = () => {
-    fetch(`http://localhost:3000/data/proceeding${number}.json`)
+    fetch(`/data/proceeding${number}.json`)
       .then((res) => res.json())
       .then((users) => {
         setUsers(users);
@@ -80,7 +80,7 @@ const Proceeding = () => {
       </Header>
       <Main>
         <PLoginBox name={users.name} />
-        <PSubscribBox
+        <PSubscribeBox
           start={users.start}
           end={users.end}
           orderedCnt={users.orderable_cnt}
@@ -92,7 +92,7 @@ const Proceeding = () => {
               orderedDatetime={users.ordered_at_datetime}
               dudate={users.due_data}
               assignee={users.assignee}
-              isspin={isSpin}
+              isSpin={isSpin}
               refresh={fetchData}
               spinner={spinner}
             />
