@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ReactComponent as PrevIcon } from '../../assets/images/prevbtn.svg';
+import { ReactComponent as PrevIcon } from '../../../assets/images/prevbtn.svg';
 
 interface headerProps {
   handlePrevStep: () => void;
