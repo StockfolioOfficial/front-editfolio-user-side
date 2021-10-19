@@ -5,12 +5,18 @@ interface ButtonStyle {
   backColor: 'skyblue' | 'purple';
 }
 
-const CheckedUpload = () => {
+interface checkProps {
+  demand: string;
+}
+
+const CheckedUpload = ({ demand }: checkProps) => {
   return (
     <>
       <Button backColor="skyblue">업로드 확인</Button>
       <RequirementTitle># 요구사항</RequirementTitle>
-      <RequirementContent>없음</RequirementContent>
+      <RequirementContent>
+        {demand.length === 0 ? '없음' : demand}
+      </RequirementContent>
       <Button backColor="purple">완료</Button>
     </>
   );
