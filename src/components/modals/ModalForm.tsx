@@ -1,10 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import useStore from '../../hooks/useStore';
-import { modalContent } from '../../stores/modal';
 
 interface buttonProps {
   color: 'purple' | 'white';
+}
+
+interface modalContent {
+  description: string;
+  subDescription: string;
+  actionButton?: () => void;
 }
 
 interface modalProps {

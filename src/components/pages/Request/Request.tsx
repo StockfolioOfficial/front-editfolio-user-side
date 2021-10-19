@@ -60,9 +60,7 @@ const Request = () => {
       <RequestHeader handlePrevStep={handlePrevStep} />
       <Step step={step} />
       {CURRENT_STEP[step]}
-      {useObserver(
-        () => modal.isShow && <ModalForm content={modal.createModal(MODAL)} />,
-      )}
+      {useObserver(() => modal.isShow && <ModalForm content={MODAL} />)}
     </Container>
   );
 };
