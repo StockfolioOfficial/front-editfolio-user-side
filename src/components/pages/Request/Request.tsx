@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import useStore from 'hooks/useStore';
 import ModalForm from 'components/modals/ModalForm';
 import CheckedUpload from './CheckedUpload';
+import Complete from './Complete';
 import RequestHeader from './RequestHeader';
 import Requirement from './Requirement';
 import Step from './Step';
@@ -11,6 +12,7 @@ import Upload from './Upload';
 
 const Request = () => {
   const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [demand, setDemand] = useState('');
 
   const { modal } = useStore();
@@ -29,6 +31,9 @@ const Request = () => {
     setStep(prevStep);
   };
 
+  const handleSuccess = () => {
+    setIsSuccess(true);
+  };
   const handleDemand = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setDemand(event.target.value);
   };
@@ -42,7 +47,7 @@ const Request = () => {
         demand={demand}
       />
     ),
-    3: <CheckedUpload demand={demand} />,
+    3: <CheckedUpload handleSuccess={handleSuccess} demand={demand} />,
   };
 
   const MODAL = {
@@ -58,14 +63,21 @@ const Request = () => {
   return (
     <Container>
       <RequestHeader handlePrevStep={handlePrevStep} />
-      <Step step={step} />
-      {CURRENT_STEP[step]}
+      {!isSuccess ? (
+        <>
+          <Step step={step} />
+          {CURRENT_STEP[step]}
+        </>
+      ) : (
+        <Complete />
+      )}
       {useObserver(() => modal.isShow && <ModalForm content={MODAL} />)}
     </Container>
   );
 };
 
 const Container = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
