@@ -1,17 +1,26 @@
 import React from 'react';
 import styled from 'styled-components';
 
+interface checkedProps {
+  handleSuccess: () => void;
+  demand: string;
+}
+
 interface ButtonStyle {
   backColor: 'skyblue' | 'purple';
 }
 
-const CheckedUpload = () => {
+const CheckedUpload = ({ handleSuccess, demand }: checkedProps) => {
   return (
     <>
       <Button backColor="skyblue">업로드 확인</Button>
       <RequirementTitle># 요구사항</RequirementTitle>
-      <RequirementContent>없음</RequirementContent>
-      <Button backColor="purple">완료</Button>
+      <RequirementContent>
+        {demand.length === 0 ? '없음' : demand}
+      </RequirementContent>
+      <Button backColor="purple" onClick={handleSuccess}>
+        완료
+      </Button>
     </>
   );
 };
