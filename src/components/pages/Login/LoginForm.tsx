@@ -1,15 +1,51 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import styled from 'styled-components';
+import useInput from 'hooks/useInputs';
+import useValidate from 'hooks/useValidate';
+import FetchData from '../../../service/fetch';
 
 const LoginForm = () => {
+  const { values, handleChange, handleSubmit, reset } = useInput({
+    email: '',
+    phone: '',
+  });
+
+  const { isValid, error, handleError } = useValidate(values);
+  const fetch = new FetchData();
+
   return (
-    <Form>
+    <Form
+      onSubmit={(e) => {
+        handleError();
+        if (!isValid) {
+          e.preventDefault();
+          reset();
+          return;
+        }
+        e.preventDefault();
+        handleSubmit(() => {
+          fetch
+            .fetchLogin(values)
+            .then(
+              (res) =>
+                res.token && localStorage.setItem('edit-token', res.token),
+            );
+        });
+      }}
+    >
       {INPUTS.map((item) => (
-        <>
-          <Label>{item.label}</Label>
-          <Input placeholder={item.placeholder} />
-        </>
+        <Fragment key={item.id}>
+          <Label htmlFor={item.id}>{item.label}</Label>
+          <Input
+            placeholder={item.placeholder}
+            id={item.id}
+            name={item.id}
+            onChange={handleChange}
+            value={values[item.id]}
+          />
+        </Fragment>
       ))}
+      <ErrorMesage>{error}</ErrorMesage>
       <Button>로그인</Button>
     </Form>
   );
@@ -53,14 +89,20 @@ const Button = styled.button`
   color: ${({ theme }) => theme.color.white};
 `;
 
+const ErrorMesage = styled.p`
+  width: 100%;
+`;
+
 export default LoginForm;
 
 const INPUTS = [
   {
+    id: 'email',
     label: '이메일',
     placeholder: '이메일을 입력해주세요.',
   },
   {
+    id: 'phone',
     label: '전화번호',
     placeholder: '전화번호를 입력해주세요.',
   },
