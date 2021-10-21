@@ -1,10 +1,13 @@
 import { observable } from 'mobx';
 
-const login = observable({});
+const login = observable({
+  token: '',
+
+  getToken(token: string) {
+    this.token = token;
+  },
+});
 
 export { login };
 
-// 로그인 로직
 // 토큰 저장하기
-// validation 관련
-// state는 저장 하지 말기?
