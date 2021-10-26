@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useObserver } from 'mobx-react-lite';
 import styled from 'styled-components';
+import { useHistory } from 'react-router';
 import useStore from 'hooks/useStore';
 import ModalForm from 'components/modals/ModalForm';
 import CheckedUpload from './CheckedUpload';
@@ -17,6 +18,8 @@ const Request = () => {
 
   const { modal } = useStore();
 
+  const history = useHistory();
+
   const handleNextStep = () => {
     if (step === 2 && demand.length === 0) {
       modal.openModal();
@@ -27,6 +30,17 @@ const Request = () => {
   };
 
   const handlePrevStep = () => {
+    if (isSuccess) {
+      setStep(3);
+      setIsSuccess(false);
+      return;
+    }
+
+    if (step === 1) {
+      history.push('/main');
+      return;
+    }
+
     const prevStep = step === 3 ? 2 : 1;
     setStep(prevStep);
   };
