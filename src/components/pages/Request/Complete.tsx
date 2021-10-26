@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import useLottie from 'hooks/useLottie';
 
 const Complete = () => {
   return (
     <Container>
-      <Lottie src="/images/check.png" />
+      {useLottie()}
       <Description>제작 의뢰가 완료되었습니다</Description>
       <SubDescription>주문서 확인 후 연락드리겠습니다.</SubDescription>
       <Button>확인</Button>
@@ -16,12 +17,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
-
-const Lottie = styled.img`
-  width: 160px;
-  height: 160px;
-  margin-top: 87px;
 `;
 
 const Description = styled.p`
