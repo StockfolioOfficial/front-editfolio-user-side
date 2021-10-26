@@ -4,15 +4,23 @@ import LoginForm from './LoginForm';
 
 const Login = () => {
   return (
-    <Container>
-      <Logo src="/images/login-logo.png" />
-      <Img src="/images/login-main.png" />
-      <SubTitle>영상편집 월 구독서비스</SubTitle>
-      <Title>에딧폴리오</Title>
-      <LoginForm />
-    </Container>
+    <Background>
+      <Container>
+        <Logo src="/images/login-logo.png" />
+        <Img src="/images/login-main.png" />
+        <SubTitle>영상편집 월 구독서비스</SubTitle>
+        <Title>에딧폴리오</Title>
+        <LoginForm />
+      </Container>
+    </Background>
   );
 };
+
+const Background = styled.div`
+  width: 100%;
+  height: 100vh;
+  background-color: #dee4ed;
+`;
 
 const Container = styled.div`
   display: flex;
@@ -21,7 +29,7 @@ const Container = styled.div`
   width: 360px;
   height: 760px;
   margin: 0 auto;
-  border: 1px solid black;
+  background-color: ${({ theme }) => theme.color.white};
 `;
 
 const Logo = styled.img`

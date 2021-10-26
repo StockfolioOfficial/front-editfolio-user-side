@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
+import { useHistory } from 'react-router';
 import useInput from 'hooks/useInputs';
 import useValidate from 'hooks/useValidate';
 import FetchData from '../../../service/fetch';
@@ -11,7 +12,10 @@ const LoginForm = () => {
   });
 
   const { isValid, error, handleError } = useValidate(values);
+
   const fetch = new FetchData();
+
+  const history = useHistory();
 
   return (
     <Form
@@ -24,12 +28,11 @@ const LoginForm = () => {
         }
         e.preventDefault();
         handleSubmit(() => {
-          fetch
-            .fetchLogin(values)
-            .then(
-              (res) =>
-                res.token && localStorage.setItem('edit-token', res.token),
-            );
+          fetch.fetchLogin(values).then((res) => {
+            if (res.token) localStorage.setItem('edit-token', res.token);
+            alert('사랑합니다.');
+            history.push('/main');
+          });
         });
       }}
     >
@@ -60,7 +63,6 @@ const Form = styled.form`
 const Label = styled.label`
   width: 100%;
   margin-bottom: 8px;
-  padding-left: 12px;
   color: ${({ theme }) => theme.color.gray};
   font-size: 11px;
   line-height: 1.4545454545;
@@ -91,6 +93,11 @@ const Button = styled.button`
 
 const ErrorMesage = styled.p`
   width: 100%;
+  margin-top: -4px;
+  padding-left: 12px;
+  color: ${({ theme }) => theme.color.purple};
+  font-size: 13px;
+  line-height: 1.5384615385;
 `;
 
 export default LoginForm;
