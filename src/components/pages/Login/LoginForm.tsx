@@ -30,7 +30,7 @@ const LoginForm = () => {
         handleSubmit(() => {
           fetch.fetchLogin(values).then((res) => {
             if (res.token) localStorage.setItem('edit-token', res.token);
-            alert('사랑합니다.');
+            alert('환영합니다.');
             history.push('/main');
           });
         });
