@@ -48,7 +48,7 @@ const ModalForm = ({ content }: modalProps) => {
 const Background = styled.div`
   position: absolute;
   width: 100vmax;
-  height: inherit;
+  height: 100vh;
   background-color: rgba(0, 0, 0, 0.4);
   z-index: 100000;
 `;
