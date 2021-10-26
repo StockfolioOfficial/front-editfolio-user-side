@@ -74,45 +74,53 @@ const Proceeding = () => {
   }, []);
 
   return (
-    <Container>
-      <Header>
-        <img src="./images/Logo.png" alt="editfolio" />
-      </Header>
-      <Main>
-        <PLoginBox name={users.name} />
-        <PSubscribeBox
-          start={users.start}
-          end={users.end}
-          orderedCnt={users.orderable_cnt}
-        />
-        {users.state === 0 && <PNoRequest />}
-        {users.state > 0 && (
-          <>
-            <PWorkInformationBox
-              orderedDatetime={users.ordered_at_datetime}
-              dudate={users.due_data}
-              assignee={users.assignee}
-              isSpin={isSpin}
-              refresh={fetchData}
-              spinner={spinner}
-            />
-            <PWorkStatusBox
-              stateEmogi={EMOGIDATA[users.state][0]}
-              stateText={EMOGIDATA[users.state][1]}
-            />
-          </>
+    <Background>
+      <Container>
+        <Header>
+          <img src="./images/Logo.png" alt="editfolio" />
+        </Header>
+        <Main>
+          <PLoginBox name={users.name} />
+          <PSubscribeBox
+            start={users.start}
+            end={users.end}
+            orderedCnt={users.orderable_cnt}
+          />
+          {users.state === 0 && <PNoRequest />}
+          {users.state > 0 && (
+            <>
+              <PWorkInformationBox
+                orderedDatetime={users.ordered_at_datetime}
+                dudate={users.due_data}
+                assignee={users.assignee}
+                isSpin={isSpin}
+                refresh={fetchData}
+                spinner={spinner}
+              />
+              <PWorkStatusBox
+                stateEmogi={EMOGIDATA[users.state][0]}
+                stateText={EMOGIDATA[users.state][1]}
+              />
+            </>
+          )}
+        </Main>
+        {users.state > 4 && (
+          <Footer>
+            <FooterLine />
+            <PNotice />
+            <PBtnBox />
+          </Footer>
         )}
-      </Main>
-      {users.state > 4 && (
-        <Footer>
-          <FooterLine />
-          <PNotice />
-          <PBtnBox />
-        </Footer>
-      )}
-    </Container>
+      </Container>
+    </Background>
   );
 };
+
+const Background = styled.div`
+  width: 100%;
+  height: 100vh;
+  background-color: #dee4ed;
+`;
 
 const Container = styled.section`
   display: flex;
@@ -124,6 +132,7 @@ const Container = styled.section`
 const Header = styled.header`
   height: 60px;
   padding: 15px 0 0 18px;
+  background-color: ${({ theme }) => theme.color.white};
 `;
 
 const Main = styled.main`
