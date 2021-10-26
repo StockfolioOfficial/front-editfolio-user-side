@@ -75,22 +75,30 @@ const Request = () => {
   };
 
   return (
-    <Container>
-      <RequestHeader handlePrevStep={handlePrevStep} />
-      {!isSuccess ? (
-        <>
-          <Step step={step} />
-          {CURRENT_STEP[step]}
-        </>
-      ) : (
-        <Complete />
-      )}
-      {useObserver(() => modal.isShow && <ModalForm content={MODAL} />)}
-    </Container>
+    <Background>
+      <Container>
+        <RequestHeader handlePrevStep={handlePrevStep} />
+        {!isSuccess ? (
+          <>
+            <Step step={step} />
+            {CURRENT_STEP[step]}
+          </>
+        ) : (
+          <Complete />
+        )}
+        {useObserver(() => modal.isShow && <ModalForm content={MODAL} />)}
+      </Container>
+    </Background>
   );
 };
 
-const Container = styled.div`
+const Background = styled.div`
+  width: 100%;
+  height: 100vh;
+  background-color: #dee4ed;
+`;
+
+const Container = styled.section`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -98,7 +106,7 @@ const Container = styled.div`
   width: 360px;
   height: 760px;
   margin: 0 auto;
-  border: 1px solid black;
+  background-color: ${({ theme }) => theme.color.white};
 `;
 
 export default Request;
