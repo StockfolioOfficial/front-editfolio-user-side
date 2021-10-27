@@ -53,8 +53,8 @@ const Proceeding = () => {
   const fetch = new FetchData();
 
   const fetchData = () => {
-    fetch.RequestData().then((res) => setProcessing(res));
-    fetch.RequestUser().then((res) => setUser(res));
+    fetch.requestData().then((res) => setProcessing(res));
+    fetch.requestUser().then((res) => setUser(res));
   };
 
   const spinner = () => {

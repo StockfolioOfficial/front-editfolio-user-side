@@ -1,7 +1,7 @@
 import { BASE_URL } from '../confing';
 
 class FetchData {
-  fetchLogin = (values: any) => {
+  login = (values: any) => {
     return fetch(`${BASE_URL}/sign-in`, {
       method: 'POST',
       headers: {
@@ -17,7 +17,7 @@ class FetchData {
     });
   };
 
-  fetchRequest = (requirement: string) => {
+  requirement = (requirement: string) => {
     return fetch(`${BASE_URL}/order`, {
       method: 'POST',
       headers: {
@@ -30,7 +30,7 @@ class FetchData {
     });
   };
 
-  RequestData = () => {
+  requestData = () => {
     return fetch(`${BASE_URL}/order/recent-processing`, {
       method: 'GET',
       headers: {
@@ -40,7 +40,7 @@ class FetchData {
     }).then((res) => res.json());
   };
 
-  RequestUser = () => {
+  requestUser = () => {
     return fetch(`${BASE_URL}/customer/me.simply`, {
       method: 'GET',
       headers: {

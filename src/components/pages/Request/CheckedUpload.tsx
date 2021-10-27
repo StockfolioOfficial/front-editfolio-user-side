@@ -33,7 +33,7 @@ const CheckedUpload = ({
           handleSubmit(() => {
             if (requirement.length === 0) reset();
           });
-          fetch.fetchRequest(requirement);
+          fetch.requirement(requirement);
           handleSuccess();
         }}
       >

@@ -26,7 +26,7 @@ const LoginForm = () => {
     }
     e.preventDefault();
     handleSubmit(() => {
-      fetch.fetchLogin(values).then((res) => {
+      fetch.login(values).then((res) => {
         if (res.status > 400) {
           handleFailed();
           reset();
