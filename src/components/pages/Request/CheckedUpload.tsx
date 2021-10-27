@@ -1,24 +1,42 @@
 import React from 'react';
 import styled from 'styled-components';
+import FetchData from '../../../service/fetch';
 
 interface checkedProps {
   handleSuccess: () => void;
-  demand: string;
+  handleSubmit: (submitAction: () => void) => void;
+  reset: () => void;
+  requirement: string;
 }
 
 interface ButtonStyle {
   backColor: 'skyblue' | 'purple';
 }
 
-const CheckedUpload = ({ handleSuccess, demand }: checkedProps) => {
+const CheckedUpload = ({
+  handleSubmit,
+  handleSuccess,
+  reset,
+  requirement,
+}: checkedProps) => {
+  const fetch = new FetchData();
   return (
     <>
       <Button backColor="skyblue">업로드 확인</Button>
       <RequirementTitle># 요구사항</RequirementTitle>
       <RequirementContent>
-        {demand.length === 0 ? '없음' : demand}
+        {requirement.length === 0 ? '없음' : requirement}
       </RequirementContent>
-      <Button backColor="purple" onClick={handleSuccess}>
+      <Button
+        backColor="purple"
+        onClick={() => {
+          handleSubmit(() => {
+            if (requirement.length === 0) reset();
+          });
+          fetch.fetchRequest(requirement);
+          handleSuccess();
+        }}
+      >
         완료
       </Button>
     </>

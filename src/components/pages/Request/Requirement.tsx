@@ -2,22 +2,23 @@ import React from 'react';
 import styled from 'styled-components';
 
 interface requireProps {
-  demand: string;
+  requirement: string;
   handleNextStep: () => void;
-  handleDemand: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  handleChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 const Requirement = ({
   handleNextStep,
-  handleDemand,
-  demand,
+  handleChange,
+  requirement,
 }: requireProps) => {
   return (
     <>
       <RequirementText
         placeholder="자세하게 적어주실수록 영상의 퀄리티가 올라갑니다."
-        onChange={handleDemand}
-        value={demand}
+        onChange={handleChange}
+        value={requirement}
+        name="requirement"
       />
       <Button onClick={handleNextStep}>다음</Button>
     </>

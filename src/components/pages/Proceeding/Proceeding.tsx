@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import useDate from 'hooks/useDate';
+import FetchData from '../../../service/fetch';
 import Exhaustion from './Exhaustion';
 import PBtnBox from './PBtnBox';
 import PLoginBox from './PLoginBox';
@@ -9,58 +11,50 @@ import PSubscribeBox from './PSubscribeBox';
 import PWorkInformationBox from './PWorkInformationBox';
 import PWorkStatusBox from './PWorkStatusBox';
 
-interface userData {
-  name: string;
-  orderable_cnt: number;
-  ordered_at_datetime: string;
-  due_data: string;
-  assignee: string;
-  state: 0 | 1 | 2 | 3 | 4 | 5 | 6;
-  start: string;
-  end: string;
+interface processingData {
+  assigneeNickname: string;
+  dueDate: string;
+  orderId: string;
+  orderState: number;
+  orderStateContent: string;
+  orderedAt: string;
+  remainingEditCount: number;
 }
 
-interface emogiData {
-  0: [string, string];
-  1: [string, string];
-  2: [string, string];
-  3: [string, string];
-  4: [string, string];
-  5: [string, string];
-  6: [string, string];
+interface userData {
+  name: string;
+  subscribeStart: string;
+  subscribeEnd: string;
+  orderableCount: number;
 }
 
 const Proceeding = () => {
-  const [users, setUsers] = useState<userData>({
-    name: '',
-    orderable_cnt: 0,
-    ordered_at_datetime: '',
-    due_data: '',
-    assignee: '',
-    state: 1,
-    start: '',
-    end: '',
+  const [processing, setProcessing] = useState<processingData>({
+    assigneeNickname: '',
+    dueDate: '',
+    orderId: '',
+    orderState: 0,
+    orderStateContent: '',
+    orderedAt: '',
+    remainingEditCount: 0,
   });
-  const [number, setUsernumber] = useState<number>(0);
+
   const [isSpin, setSpin] = useState<boolean>(false);
 
-  const EMOGIDATA: emogiData = {
-    0: ['', ''],
-    1: ['🤔', '영상에 알맞는 편집자를 배정 중입니다.'],
-    2: ['👀', '배정된 편집자가 영상을 열심히 확인하고 있어요'],
-    3: ['😍️', '영상을 이쁘게 자르고 붙이는 중'],
-    4: ['🎇️', '아주 환상적인 이펙트를 입히는 중입니다.'],
-    5: ['😘️', '영상편집이 완료되었습니다'],
-    6: ['🛠️', '요청하신 수정사항을 작업중입니다.'],
-  };
+  const [user, setUser] = useState<userData>({
+    name: '',
+    subscribeStart: '',
+    subscribeEnd: '',
+    orderableCount: 0,
+  });
+
+  const { handleDate, handleTime } = useDate();
+
+  const fetch = new FetchData();
 
   const fetchData = () => {
-    fetch(`/data/proceeding${number}.json`)
-      .then((res) => res.json())
-      .then((users) => {
-        setUsers(users);
-      });
-    setUsernumber(number + 1);
+    fetch.RequestData().then((res) => setProcessing(res));
+    fetch.RequestUser().then((res) => setUser(res));
   };
 
   const spinner = () => {
@@ -81,35 +75,36 @@ const Proceeding = () => {
           <img src="./images/Logo.png" alt="editfolio" />
         </Header>
         <Main>
-          <PLoginBox name={users.name} />
-          {users.orderable_cnt > 0 ? (
+          <PLoginBox name={user.name} />
+          {processing.remainingEditCount > 0 ? (
             <PSubscribeBox
-              start={users.start}
-              end={users.end}
-              orderedCnt={users.orderable_cnt}
+              start={handleDate(user.subscribeStart)}
+              end={handleDate(user.subscribeEnd)}
+              orderedCnt={processing.remainingEditCount}
             />
           ) : (
             <Exhaustion />
           )}
-          {users.state === 0 && users.orderable_cnt > 0 && <PNoRequest />}
-          {users.state > 0 && (
+          {processing.orderState === 0 && processing.remainingEditCount > 0 && (
+            <PNoRequest />
+          )}
+          {processing.orderState > 0 && (
             <>
               <PWorkInformationBox
-                orderedDatetime={users.ordered_at_datetime}
-                dudate={users.due_data}
-                assignee={users.assignee}
+                orderedDatetime={handleTime(processing.orderedAt)}
+                dudate={handleDate(processing.dueDate)}
+                assignee={processing.assigneeNickname}
                 isSpin={isSpin}
                 refresh={fetchData}
                 spinner={spinner}
               />
               <PWorkStatusBox
-                stateEmogi={EMOGIDATA[users.state][0]}
-                stateText={EMOGIDATA[users.state][1]}
+                status={processing.orderState && processing.orderState}
               />
             </>
           )}
         </Main>
-        {users.state > 4 && (
+        {processing.orderState > 4 && (
           <Footer>
             <FooterLine />
             <PNotice />
