@@ -1,6 +1,6 @@
 class FetchData {
   fetchLogin = (values: any) => {
-    return fetch('http://192.168.35.85:8000/user/sign', {
+    return fetch('https://api-ef.stockfolio.ai/sign-in', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
@@ -9,7 +9,10 @@ class FetchData {
         username: values.email,
         password: values.phone.replaceAll('-', ''),
       }),
-    }).then((res) => res.json());
+    }).then((res) => {
+      if (res.status > 400) return res;
+      return res.json();
+    });
   };
 }
 

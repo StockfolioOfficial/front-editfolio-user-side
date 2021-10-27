@@ -19,7 +19,12 @@ const useValidate = ({ email, phone }: validateInter) => {
     setError(message);
   }, [email, phone]);
 
-  return { isValid, error, handleError };
+  const handleFailed = useCallback(() => {
+    const message = '전화번호와 이메일을 다시 확인해주세요.';
+    setError(message);
+  }, []);
+
+  return { isValid, error, handleError, handleFailed };
 };
 
 export default useValidate;

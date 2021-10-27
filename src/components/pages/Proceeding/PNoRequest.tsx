@@ -1,14 +1,21 @@
 import React from 'react';
+import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
 const PNoRequest = () => {
+  const history = useHistory();
+
+  const goToRequest = () => {
+    history.push('/request');
+  };
+
   return (
     <NoRequest>
       <NoProceedingText>진행 중인 영상제작 의뢰가 없습니다.</NoProceedingText>
       <StateProceedingText>
         아래 제작 의뢰를 눌러 영상편집 의뢰를 시작하세요.
       </StateProceedingText>
-      <RequestButton>제작 의뢰</RequestButton>
+      <RequestButton onClick={goToRequest}>제작 의뢰</RequestButton>
     </NoRequest>
   );
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
 interface Login {
@@ -6,6 +7,13 @@ interface Login {
 }
 
 const PLoginBox = ({ name }: Login) => {
+  const history = useHistory();
+
+  const handleLogout = () => {
+    localStorage.removeItem('edit-token');
+    history.push('/');
+  };
+
   return (
     <LoginBox>
       <LoginText>
@@ -13,7 +21,7 @@ const PLoginBox = ({ name }: Login) => {
         <br />
         환영합니다 :)
       </LoginText>
-      <LoginBtn>로그아웃</LoginBtn>
+      <LoginBtn onClick={handleLogout}>로그아웃</LoginBtn>
     </LoginBox>
   );
 };
@@ -35,7 +43,7 @@ const LoginText = styled.div`
   margin: 22px 0 44px 28px;
 `;
 
-const LoginBtn = styled.div`
+const LoginBtn = styled.button`
   display: flex;
   justify-content: center;
   width: 64px;
