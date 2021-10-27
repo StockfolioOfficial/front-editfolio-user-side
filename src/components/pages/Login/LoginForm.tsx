@@ -11,31 +11,38 @@ const LoginForm = () => {
     phone: '',
   });
 
-  const { isValid, error, handleError } = useValidate(values);
+  const { isValid, error, handleError, handleFailed } = useValidate(values);
 
   const fetch = new FetchData();
 
   const history = useHistory();
 
-  return (
-    <Form
-      onSubmit={(e) => {
-        handleError();
-        if (!isValid) {
-          e.preventDefault();
-          reset();
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    handleError();
+    if (!isValid) {
+      e.preventDefault();
+      reset();
+      return;
+    }
+    e.preventDefault();
+    handleSubmit(() => {
+      fetch.fetchLogin(values).then((res) => {
+        if (res.status > 400) {
+          handleFailed();
           return;
         }
-        e.preventDefault();
-        handleSubmit(() => {
-          fetch.fetchLogin(values).then((res) => {
-            if (res.token) localStorage.setItem('edit-token', res.token);
-            alert('환영합니다.');
-            history.push('/main');
-          });
-        });
-      }}
-    >
+
+        if (res.token) {
+          localStorage.setItem('edit-token', res);
+          alert('환영합니다.');
+          history.push('/main');
+        }
+      });
+    });
+  };
+
+  return (
+    <Form onSubmit={handleLogin}>
       {INPUTS.map((item) => (
         <Fragment key={item.id}>
           <Label htmlFor={item.id}>{item.label}</Label>

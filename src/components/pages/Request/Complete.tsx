@@ -1,14 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
 import useLottie from 'hooks/useLottie';
+import { useHistory } from 'react-router';
 
 const Complete = () => {
+  const history = useHistory();
+
+  const goToMain = () => {
+    history.push('/main');
+  };
+
   return (
     <Container>
       {useLottie()}
       <Description>제작 의뢰가 완료되었습니다</Description>
       <SubDescription>주문서 확인 후 연락드리겠습니다.</SubDescription>
-      <Button>확인</Button>
+      <Button onClick={goToMain}>확인</Button>
     </Container>
   );
 };

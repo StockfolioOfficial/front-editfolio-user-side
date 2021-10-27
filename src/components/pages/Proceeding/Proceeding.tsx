@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import Exhaustion from './Exhaustion';
 import PBtnBox from './PBtnBox';
 import PLoginBox from './PLoginBox';
 import PNoRequest from './PNoRequest';
@@ -10,7 +11,7 @@ import PWorkStatusBox from './PWorkStatusBox';
 
 interface userData {
   name: string;
-  orderable_cnt: string;
+  orderable_cnt: number;
   ordered_at_datetime: string;
   due_data: string;
   assignee: string;
@@ -32,7 +33,7 @@ interface emogiData {
 const Proceeding = () => {
   const [users, setUsers] = useState<userData>({
     name: '',
-    orderable_cnt: '',
+    orderable_cnt: 0,
     ordered_at_datetime: '',
     due_data: '',
     assignee: '',
@@ -40,7 +41,7 @@ const Proceeding = () => {
     start: '',
     end: '',
   });
-  const [number, setUsernumber] = useState<number>(1);
+  const [number, setUsernumber] = useState<number>(0);
   const [isSpin, setSpin] = useState<boolean>(false);
 
   const EMOGIDATA: emogiData = {
@@ -81,12 +82,16 @@ const Proceeding = () => {
         </Header>
         <Main>
           <PLoginBox name={users.name} />
-          <PSubscribeBox
-            start={users.start}
-            end={users.end}
-            orderedCnt={users.orderable_cnt}
-          />
-          {users.state === 0 && <PNoRequest />}
+          {users.orderable_cnt > 0 ? (
+            <PSubscribeBox
+              start={users.start}
+              end={users.end}
+              orderedCnt={users.orderable_cnt}
+            />
+          ) : (
+            <Exhaustion />
+          )}
+          {users.state === 0 && users.orderable_cnt > 0 && <PNoRequest />}
           {users.state > 0 && (
             <>
               <PWorkInformationBox
@@ -133,6 +138,10 @@ const Header = styled.header`
   height: 60px;
   padding: 15px 0 0 18px;
   background-color: ${({ theme }) => theme.color.white};
+
+  & img {
+    cursor: pointer;
+  }
 `;
 
 const Main = styled.main`

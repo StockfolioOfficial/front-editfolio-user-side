@@ -4,7 +4,7 @@ import styled from 'styled-components';
 interface SubscriptProps {
   start: string;
   end: string;
-  orderedCnt: string;
+  orderedCnt: number;
 }
 
 const PSubscribeBox = ({ start, end, orderedCnt }: SubscriptProps) => {
