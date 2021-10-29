@@ -51,14 +51,14 @@ const WorkStatusBox = styled.div`
 `;
 
 const Emogi = styled.span`
-  margin-top: 32px;
+  margin: 32px 0 16px;
   font-size: 100px;
 `;
 
 const WorkStatus = styled.div`
   height: 44px;
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 700;
   line-height: 22px;
   margin: 0 auto;
   color: #5d4ee8;

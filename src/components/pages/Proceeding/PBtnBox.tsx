@@ -2,13 +2,17 @@ import React from 'react';
 import styled from 'styled-components';
 import useStore from 'hooks/useStore';
 
-const PBtnBox = () => {
+interface PDtnBoxProps {
+  remainingEditCount?: number;
+}
+
+const PBtnBox = ({ remainingEditCount }: PDtnBoxProps) => {
   const { modal } = useStore();
 
   return (
     <>
       <BtnBox>
-        <FixRequestBtn>수정 요청</FixRequestBtn>
+        <FixRequestBtn>수정 요청({remainingEditCount})</FixRequestBtn>
         <FixNoneBtn
           onClick={() => {
             modal.openModal();
@@ -22,9 +26,14 @@ const PBtnBox = () => {
   );
 };
 
+PBtnBox.defaultProps = {
+  remainingEditCount: 0,
+};
+
 const BtnBox = styled.div`
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  gap: 8px;
   margin-top: 20px;
 `;
 
@@ -52,7 +61,7 @@ const Additional = styled.button`
   display: flex;
   text-align: center;
   justify-content: center;
-  border: none;
+  border: 1px solid #eeeeee;
   width: 336px;
   height: 48px;
   font-size: 14px;

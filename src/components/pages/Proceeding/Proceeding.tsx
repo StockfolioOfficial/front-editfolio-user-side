@@ -101,7 +101,7 @@ const Proceeding = () => {
           <PSubscribeBox
             start={handleDate(user.subscribeStart)}
             end={handleDate(user.subscribeEnd)}
-            orderedCnt={processing.remainingEditCount}
+            orderedCnt={user.orderableCount}
           />
         );
         break;
@@ -144,9 +144,7 @@ const Proceeding = () => {
                 refresh={fetchData}
                 spinner={spinner}
               />
-              <PWorkStatusBox
-                status={processing.orderState && processing.orderState}
-              />
+              <PWorkStatusBox status={processing.orderState} />
             </>
           )}
         </Main>
@@ -155,7 +153,7 @@ const Proceeding = () => {
           <Footer>
             <FooterLine />
             <PNotice />
-            <PBtnBox />
+            <PBtnBox remainingEditCount={processing.remainingEditCount} />
           </Footer>
         )}
       </Container>
@@ -207,7 +205,7 @@ const FooterLine = styled.div`
   width: 336px;
   height: 1px;
   margin-left: 12px;
-  border: 1px solid #becbd8;
+  border-top: 1px solid #becbd8;
 `;
 
 export default Proceeding;

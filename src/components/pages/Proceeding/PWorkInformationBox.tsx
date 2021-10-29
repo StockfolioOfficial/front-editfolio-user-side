@@ -51,7 +51,9 @@ const PWorkInformationBox = ({
         </OrderBox>
         <OrderBox>
           <Order>담당 편집자</Order>
-          <OrderInfo>{assignee}</OrderInfo>
+          <OrderAssignee noData={assignee === undefined || assignee === ''}>
+            {assignee}
+          </OrderAssignee>
         </OrderBox>
       </WorkInformation>
     </WorkInformationBox>
@@ -91,6 +93,7 @@ const rotation = keyframes`
 const Refresh = styled.div``;
 
 const RefreshButton = styled(RefreshSvg)<refresh>`
+  cursor: pointer;
   animation: ${({ isSpin }) =>
     isSpin &&
     css`
@@ -126,6 +129,10 @@ const OrderInfo = styled.span`
   font-size: 13px;
   line-height: 20px;
   font-weight: 400;
+`;
+
+const OrderAssignee = styled(OrderInfo)<{ noData?: boolean }>`
+  color: ${({ noData }) => (!noData ? '#6ab4f7' : '#6ab4f7')};
 `;
 
 export default PWorkInformationBox;

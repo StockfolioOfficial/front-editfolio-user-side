@@ -19,7 +19,7 @@ const PSubscribeBox = ({ start, end, orderedCnt }: SubscriptProps) => {
         <SubscribeDate>{end}</SubscribeDate>
       </SubscribeBox>
       <NumberOfVideoBox>
-        영상편집 의뢰가능횟수가 {orderedCnt}회 남았습니다.
+        영상편집 의뢰가능횟수가 <span>{orderedCnt}회</span> 남았습니다.
       </NumberOfVideoBox>
     </>
   );
@@ -45,7 +45,6 @@ const Subscribe = styled.div`
 `;
 
 const SubscribeDate = styled.div`
-  width: 73px;
   height: 20px;
   margin: 10px 16px 10px 0;
   color: #232628;
@@ -65,5 +64,11 @@ const NumberOfVideoBox = styled.div`
   border-radius: 16px;
   margin: 16px 24px 0 24px;
   background-color: rgb(238, 239, 249);
+
+  > span {
+    color: #5d4ee8;
+    font-weight: 700;
+    margin: 0 0.2em;
+  }
 `;
 export default PSubscribeBox;
