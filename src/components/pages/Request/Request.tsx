@@ -13,7 +13,6 @@ import RequestHeader from './RequestHeader';
 import Requirement from './Requirement';
 import Step from './Step';
 import Upload from './Upload';
-import AbnomalRequest from './AbnomalRequest';
 
 const Request = () => {
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -93,29 +92,25 @@ const Request = () => {
 
   return (
     <Background>
-      {localStorage.getItem('edit-token') ? (
-        <Container>
-          <RequestHeader handlePrevStep={handlePrevStep} />
-          {!isSuccess ? (
-            <>
-              <Step step={step} />
-              {CURRENT_STEP[step]}
-            </>
-          ) : (
-            <Complete />
-          )}
-          {useObserver(
-            () =>
-              modal.isShow && (
-                <Portal>
-                  <ModalForm content={MODAL} />
-                </Portal>
-              ),
-          )}
-        </Container>
-      ) : (
-        <AbnomalRequest />
-      )}
+      <Container>
+        <RequestHeader handlePrevStep={handlePrevStep} />
+        {!isSuccess ? (
+          <>
+            <Step step={step} />
+            {CURRENT_STEP[step]}
+          </>
+        ) : (
+          <Complete />
+        )}
+        {useObserver(
+          () =>
+            modal.isShow && (
+              <Portal>
+                <ModalForm content={MODAL} />
+              </Portal>
+            ),
+        )}
+      </Container>
     </Background>
   );
 };

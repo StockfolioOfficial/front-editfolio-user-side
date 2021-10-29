@@ -14,7 +14,6 @@ import PNotice from './PNotice';
 import PSubscribeBox from './PSubscribeBox';
 import PWorkInformationBox from './PWorkInformationBox';
 import PWorkStatusBox from './PWorkStatusBox';
-import Abnomal from './Abnomal';
 import ModalForm from '../../modals/ModalForm';
 import Portal from '../../modals/Portal';
 
@@ -129,32 +128,29 @@ const Proceeding = () => {
         <Header>
           <img src="./images/Logo.png" alt="editfolio" />
         </Header>
-        {localStorage.getItem('edit-token') ? (
-          <Main>
-            <PLoginBox name={user.name} />
-            {renderSubscribeBox(user.simpleNotify)}
-            {processing.orderState < 0 && user.orderableCount > 0 && (
-              <PNoRequest />
-            )}
-            {processing.orderState > 0 && user.orderableCount > 0 && (
-              <>
-                <PWorkInformationBox
-                  orderedDatetime={handleTime(processing.orderedAt)}
-                  dudate={handleDate(processing.dueDate)}
-                  assignee={processing.assigneeNickname}
-                  isSpin={isSpin}
-                  refresh={fetchData}
-                  spinner={spinner}
-                />
-                <PWorkStatusBox
-                  status={processing.orderState && processing.orderState}
-                />
-              </>
-            )}
-          </Main>
-        ) : (
-          <Abnomal />
-        )}
+        <Main>
+          <PLoginBox name={user.name} />
+          {renderSubscribeBox(user.simpleNotify)}
+          {processing.orderState < 0 && user.orderableCount > 0 && (
+            <PNoRequest />
+          )}
+          {processing.orderState > 0 && user.orderableCount > 0 && (
+            <>
+              <PWorkInformationBox
+                orderedDatetime={handleTime(processing.orderedAt)}
+                dudate={handleDate(processing.dueDate)}
+                assignee={processing.assigneeNickname}
+                isSpin={isSpin}
+                refresh={fetchData}
+                spinner={spinner}
+              />
+              <PWorkStatusBox
+                status={processing.orderState && processing.orderState}
+              />
+            </>
+          )}
+        </Main>
+
         {processing.orderState > 3 && (
           <Footer>
             <FooterLine />
