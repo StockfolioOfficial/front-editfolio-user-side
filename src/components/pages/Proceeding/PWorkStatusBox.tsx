@@ -1,15 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import useStatus from 'hooks/useStatus';
 import useTypo from 'hooks/useTypo';
 
 interface WorkStatusBoxProps {
-  status: number;
+  content: string;
+  emoji: string;
 }
 
-const PWorkStatusBox = ({ status }: WorkStatusBoxProps) => {
-  const { handleStatus } = useStatus();
-
+const PWorkStatusBox = ({ content, emoji }: WorkStatusBoxProps) => {
   const { handleLineChange } = useTypo();
 
   return (
@@ -18,8 +16,8 @@ const PWorkStatusBox = ({ status }: WorkStatusBoxProps) => {
         <Title>작업상태</Title>
       </WorkInformationTitle>
       <WorkStatusBox>
-        <Emogi>{handleStatus(status)[0]}</Emogi>
-        <WorkStatus>{handleLineChange(handleStatus(status)[1])}</WorkStatus>
+        <Emogi>{emoji}</Emogi>
+        <WorkStatus>{handleLineChange(content)}</WorkStatus>
       </WorkStatusBox>
     </>
   );

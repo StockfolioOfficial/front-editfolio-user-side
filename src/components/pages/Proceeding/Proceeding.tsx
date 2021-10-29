@@ -18,20 +18,23 @@ import ModalForm from '../../modals/ModalForm';
 import Portal from '../../modals/Portal';
 
 interface processingData {
-  assigneeNickname: string;
-  dueDate: string;
+  assigneeNickname: string | null;
+  dueDate: string | null;
   orderId: string;
   orderState: number;
   orderStateContent: string;
+  orderStateEmoji: string;
   orderedAt: string;
   remainingEditCount: number;
 }
 
 interface userData {
+  userId: string;
   name: string;
+  onedriveLink: string;
   subscribeStart: string;
   subscribeEnd: string;
-  orderableCount: number;
+  remainingOrderCount: number;
   simpleNotify: '';
 }
 
@@ -41,11 +44,12 @@ interface backgroundProps {
 
 const Proceeding = () => {
   const [processing, setProcessing] = useState<processingData>({
-    assigneeNickname: '',
-    dueDate: '',
+    assigneeNickname: null,
+    dueDate: null,
     orderId: '',
     orderState: 0,
     orderStateContent: '',
+    orderStateEmoji: '',
     orderedAt: '',
     remainingEditCount: 0,
   });
@@ -53,10 +57,12 @@ const Proceeding = () => {
   const [isSpin, setSpin] = useState<boolean>(false);
 
   const [user, setUser] = useState<userData>({
+    userId: '',
     name: '',
     subscribeStart: '',
     subscribeEnd: '',
-    orderableCount: 0,
+    remainingOrderCount: 0,
+    onedriveLink: '',
     simpleNotify: '',
   });
 
@@ -101,7 +107,7 @@ const Proceeding = () => {
           <PSubscribeBox
             start={handleDate(user.subscribeStart)}
             end={handleDate(user.subscribeEnd)}
-            orderedCnt={user.orderableCount}
+            orderedCnt={user.remainingOrderCount}
           />
         );
         break;
@@ -131,20 +137,23 @@ const Proceeding = () => {
         <Main>
           <PLoginBox name={user.name} />
           {renderSubscribeBox(user.simpleNotify)}
-          {processing.orderState < 0 && user.orderableCount > 0 && (
+          {processing.orderState < 0 && user.remainingOrderCount > 0 && (
             <PNoRequest />
           )}
-          {processing.orderState > 0 && user.orderableCount > 0 && (
+          {processing.orderState > 0 && user.remainingOrderCount > 0 && (
             <>
               <PWorkInformationBox
                 orderedDatetime={handleTime(processing.orderedAt)}
                 dudate={handleDate(processing.dueDate)}
-                assignee={processing.assigneeNickname}
+                assignee={processing.assigneeNickname ?? '-'}
                 isSpin={isSpin}
                 refresh={fetchData}
                 spinner={spinner}
               />
-              <PWorkStatusBox status={processing.orderState} />
+              <PWorkStatusBox
+                content={processing.orderStateContent}
+                emoji={processing.orderStateEmoji}
+              />
             </>
           )}
         </Main>
