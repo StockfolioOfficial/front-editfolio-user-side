@@ -20,6 +20,7 @@ const CheckedUpload = ({
   requirement,
 }: checkedProps) => {
   const fetch = new FetchData();
+  const newRequirement = requirement.length === 0 ? '없음' : requirement;
   return (
     <>
       <Button backColor="skyblue">업로드 확인</Button>
@@ -33,7 +34,7 @@ const CheckedUpload = ({
           handleSubmit(() => {
             if (requirement.length === 0) reset();
           });
-          fetch.requirement(requirement);
+          fetch.requirement(newRequirement);
           handleSuccess();
         }}
       >

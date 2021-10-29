@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useObserver } from 'mobx-react-lite';
 import useDate from 'hooks/useDate';
+import useStore from 'hooks/useStore';
+import usePermission from 'hooks/usePermission';
 import FetchData from '../../../service/fetch';
 import Exhaustion from './Exhaustion';
+import Expiration from './Expiration';
 import PBtnBox from './PBtnBox';
 import PLoginBox from './PLoginBox';
 import PNoRequest from './PNoRequest';
@@ -10,6 +14,9 @@ import PNotice from './PNotice';
 import PSubscribeBox from './PSubscribeBox';
 import PWorkInformationBox from './PWorkInformationBox';
 import PWorkStatusBox from './PWorkStatusBox';
+import Abnomal from './Abnomal';
+import ModalForm from '../../modals/ModalForm';
+import Portal from '../../modals/Portal';
 
 interface processingData {
   assigneeNickname: string;
@@ -26,6 +33,11 @@ interface userData {
   subscribeStart: string;
   subscribeEnd: string;
   orderableCount: number;
+  simpleNotify: '';
+}
+
+interface backgroundProps {
+  isLong: boolean;
 }
 
 const Proceeding = () => {
@@ -46,9 +58,14 @@ const Proceeding = () => {
     subscribeStart: '',
     subscribeEnd: '',
     orderableCount: 0,
+    simpleNotify: '',
   });
 
+  const { modal } = useStore();
+
   const { handleDate, handleTime } = useDate();
+
+  const { checkToken } = usePermission();
 
   const fetch = new FetchData();
 
@@ -68,43 +85,77 @@ const Proceeding = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    checkToken();
+  }, []);
+
+  const renderSubscribeBox = (notify: string) => {
+    switch (notify) {
+      case 'NEED_BUY_SUBSCRIBE':
+        return <Expiration />;
+        break;
+      case 'NEED_BUY_ONE_EDIT':
+        return <Exhaustion />;
+        break;
+      case 'NONE':
+        return (
+          <PSubscribeBox
+            start={handleDate(user.subscribeStart)}
+            end={handleDate(user.subscribeEnd)}
+            orderedCnt={processing.remainingEditCount}
+          />
+        );
+        break;
+      default:
+        return <Expiration />;
+        break;
+    }
+  };
+
+  const MODAL = {
+    description: '해당 의뢰건을 완료할까요?',
+    subDescription:
+      '완료 결정 후\n 더이상 수정요청을 하실 수 없습니다. \n 한번 더 확인 후 결졍해주세요.',
+    actionButton: () => {
+      fetch.requestComplete().then((res) => res);
+      modal.closeModal();
+      fetchData();
+    },
+  };
+
   return (
-    <Background>
+    <Background isLong={processing.orderState > 3}>
       <Container>
         <Header>
           <img src="./images/Logo.png" alt="editfolio" />
         </Header>
-        <Main>
-          <PLoginBox name={user.name} />
-          {processing.remainingEditCount > 0 ? (
-            <PSubscribeBox
-              start={handleDate(user.subscribeStart)}
-              end={handleDate(user.subscribeEnd)}
-              orderedCnt={processing.remainingEditCount}
-            />
-          ) : (
-            <Exhaustion />
-          )}
-          {processing.orderState === 0 && processing.remainingEditCount > 0 && (
-            <PNoRequest />
-          )}
-          {processing.orderState > 0 && (
-            <>
-              <PWorkInformationBox
-                orderedDatetime={handleTime(processing.orderedAt)}
-                dudate={handleDate(processing.dueDate)}
-                assignee={processing.assigneeNickname}
-                isSpin={isSpin}
-                refresh={fetchData}
-                spinner={spinner}
-              />
-              <PWorkStatusBox
-                status={processing.orderState && processing.orderState}
-              />
-            </>
-          )}
-        </Main>
-        {processing.orderState > 4 && (
+        {localStorage.getItem('edit-token') ? (
+          <Main>
+            <PLoginBox name={user.name} />
+            {renderSubscribeBox(user.simpleNotify)}
+            {processing.orderState < 0 && user.orderableCount > 0 && (
+              <PNoRequest />
+            )}
+            {processing.orderState > 0 && user.orderableCount > 0 && (
+              <>
+                <PWorkInformationBox
+                  orderedDatetime={handleTime(processing.orderedAt)}
+                  dudate={handleDate(processing.dueDate)}
+                  assignee={processing.assigneeNickname}
+                  isSpin={isSpin}
+                  refresh={fetchData}
+                  spinner={spinner}
+                />
+                <PWorkStatusBox
+                  status={processing.orderState && processing.orderState}
+                />
+              </>
+            )}
+          </Main>
+        ) : (
+          <Abnomal />
+        )}
+        {processing.orderState > 3 && (
           <Footer>
             <FooterLine />
             <PNotice />
@@ -112,13 +163,22 @@ const Proceeding = () => {
           </Footer>
         )}
       </Container>
+      {useObserver(
+        () =>
+          modal.isShow && (
+            <Portal>
+              <ModalForm content={MODAL} />
+            </Portal>
+          ),
+      )}
     </Background>
   );
 };
 
-const Background = styled.div`
+const Background = styled.div<backgroundProps>`
+  position: relative;
   width: 100%;
-  height: 100vh;
+  height: ${({ isLong }) => (isLong ? '100%' : '100vh')};
   background-color: #dee4ed;
 `;
 

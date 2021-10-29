@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useObserver } from 'mobx-react-lite';
 import styled from 'styled-components';
 import { useHistory } from 'react-router';
 import useInputs from 'hooks/useInputs';
 import useStore from 'hooks/useStore';
+import usePermission from 'hooks/usePermission';
 import ModalForm from 'components/modals/ModalForm';
+import Portal from 'components/modals/Portal';
 import CheckedUpload from './CheckedUpload';
 import Complete from './Complete';
 import RequestHeader from './RequestHeader';
 import Requirement from './Requirement';
 import Step from './Step';
 import Upload from './Upload';
+import AbnomalRequest from './AbnomalRequest';
 
 const Request = () => {
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -20,9 +23,15 @@ const Request = () => {
     requirement: '',
   });
 
+  const { checkToken } = usePermission();
+
   const { modal } = useStore();
 
   const history = useHistory();
+
+  useEffect(() => {
+    checkToken();
+  }, []);
 
   const handleNextStep = () => {
     if (step === 2 && values.requirement.length === 0) {
@@ -84,18 +93,29 @@ const Request = () => {
 
   return (
     <Background>
-      <Container>
-        <RequestHeader handlePrevStep={handlePrevStep} />
-        {!isSuccess ? (
-          <>
-            <Step step={step} />
-            {CURRENT_STEP[step]}
-          </>
-        ) : (
-          <Complete />
-        )}
-        {useObserver(() => modal.isShow && <ModalForm content={MODAL} />)}
-      </Container>
+      {localStorage.getItem('edit-token') ? (
+        <Container>
+          <RequestHeader handlePrevStep={handlePrevStep} />
+          {!isSuccess ? (
+            <>
+              <Step step={step} />
+              {CURRENT_STEP[step]}
+            </>
+          ) : (
+            <Complete />
+          )}
+          {useObserver(
+            () =>
+              modal.isShow && (
+                <Portal>
+                  <ModalForm content={MODAL} />
+                </Portal>
+              ),
+          )}
+        </Container>
+      ) : (
+        <AbnomalRequest />
+      )}
     </Background>
   );
 };

@@ -47,7 +47,8 @@ const ModalForm = ({ content }: modalProps) => {
 };
 
 const Background = styled.div`
-  position: absolute;
+  position: fixed;
+  top: 0;
   width: 100vmax;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.4);
@@ -75,6 +76,7 @@ const SubDescription = styled.p`
   color: ${({ theme }) => theme.color.gray};
   font-size: 11px;
   line-height: 1.4545454545;
+  text-align: center;
 `;
 
 const SubDescriptionBox = styled.div`
