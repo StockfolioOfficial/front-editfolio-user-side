@@ -1,12 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
+import useStore from 'hooks/useStore';
 
 const PBtnBox = () => {
+  const { modal } = useStore();
+
   return (
     <>
       <BtnBox>
         <FixRequestBtn>수정 요청</FixRequestBtn>
-        <FixNoneBtn>수정사항 없음</FixNoneBtn>
+        <FixNoneBtn
+          onClick={() => {
+            modal.openModal();
+          }}
+        >
+          수정사항 없음
+        </FixNoneBtn>
       </BtnBox>
       <Additional>추가 수정 결제</Additional>
     </>

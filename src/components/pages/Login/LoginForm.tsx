@@ -26,14 +26,15 @@ const LoginForm = () => {
     }
     e.preventDefault();
     handleSubmit(() => {
-      fetch.fetchLogin(values).then((res) => {
+      fetch.login(values).then((res) => {
         if (res.status > 400) {
           handleFailed();
+          reset();
           return;
         }
 
         if (res.token) {
-          localStorage.setItem('edit-token', res);
+          localStorage.setItem('edit-token', res.token);
           alert('환영합니다.');
           history.push('/main');
         }

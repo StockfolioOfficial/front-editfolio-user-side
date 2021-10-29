@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 interface SubscriptProps {
-  start: string;
-  end: string;
+  start: string | undefined;
+  end: string | undefined;
   orderedCnt: number;
 }
 
