@@ -25,19 +25,16 @@ const LoginForm = () => {
       return;
     }
     e.preventDefault();
-    handleSubmit(() => {
-      fetch.fetchLogin(values).then((res) => {
-        if (res.status > 400) {
-          handleFailed();
-          return;
-        }
+    handleSubmit(async () => {
+      const res = await fetch.fetchLogin(values);
 
-        if (res.token) {
-          localStorage.setItem('edit-token', res);
-          alert('환영합니다.');
-          history.push('/main');
-        }
-      });
+      if (!res.token) {
+        handleFailed();
+        return;
+      }
+      localStorage.setItem('edit-token', res.token);
+      alert('환영합니다.');
+      history.push('/main');
     });
   };
 

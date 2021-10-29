@@ -19,16 +19,21 @@ const Login = () => {
 const Background = styled.div`
   width: 100%;
   height: 100vh;
+  display: flex;
+  flex-flow: column nowrap;
   background-color: #dee4ed;
+  overflow-y: scroll;
 `;
 
 const Container = styled.section`
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex-shrink: 0;
   width: 360px;
-  height: 760px;
   margin: 0 auto;
+  padding-bottom: 74px;
   background-color: ${({ theme }) => theme.color.white};
 `;
 
