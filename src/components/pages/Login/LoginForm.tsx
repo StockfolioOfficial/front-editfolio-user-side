@@ -26,7 +26,7 @@ const LoginForm = () => {
     }
     e.preventDefault();
     handleSubmit(async () => {
-      const res = await fetch.fetchLogin(values);
+      const res = await fetch.login(values);
 
       if (!res.token) {
         handleFailed();

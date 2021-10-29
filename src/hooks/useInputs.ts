@@ -1,6 +1,10 @@
 import { useState, useCallback } from 'react';
 
-const useInput = (initialValues: any) => {
+interface ValuesObjType {
+  [key: string]: string;
+}
+
+const useInput = (initialValues: ValuesObjType) => {
   const [values, setValues] = useState(initialValues);
 
   const handleChange = useCallback(
@@ -14,7 +18,6 @@ const useInput = (initialValues: any) => {
   const handleSubmit = useCallback(
     (submitAction) => {
       submitAction();
-      reset();
     },
     [values],
   );

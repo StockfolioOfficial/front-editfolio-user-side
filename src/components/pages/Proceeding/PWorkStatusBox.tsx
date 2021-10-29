@@ -1,20 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
+import useStatus from 'hooks/useStatus';
+import useTypo from 'hooks/useTypo';
 
 interface WorkStatusBoxProps {
-  stateEmogi: string;
-  stateText: string;
+  status: number;
 }
 
-const PWorkStatusBox = ({ stateEmogi, stateText }: WorkStatusBoxProps) => {
+const PWorkStatusBox = ({ status }: WorkStatusBoxProps) => {
+  const { handleStatus } = useStatus();
+
+  const { handleLineChange } = useTypo();
+
   return (
     <>
       <WorkInformationTitle>
         <Title>작업상태</Title>
       </WorkInformationTitle>
       <WorkStatusBox>
-        <Emogi>{stateEmogi}</Emogi>
-        <WorkStatus>{stateText}</WorkStatus>
+        <Emogi>{handleStatus(status)[0]}</Emogi>
+        <WorkStatus>{handleLineChange(handleStatus(status)[1])}</WorkStatus>
       </WorkStatusBox>
     </>
   );
@@ -50,13 +55,12 @@ const Emogi = styled.span`
   font-size: 100px;
 `;
 
-const WorkStatus = styled.span`
-  width: 141px;
+const WorkStatus = styled.div`
   height: 44px;
   font-size: 14px;
   font-weight: 400;
   line-height: 22px;
-  margin: 0 97.5px 0 97.5px;
+  margin: 0 auto;
   color: #5d4ee8;
   text-align: center;
 `;

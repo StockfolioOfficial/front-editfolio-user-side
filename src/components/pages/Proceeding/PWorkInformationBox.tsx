@@ -3,8 +3,8 @@ import styled, { keyframes, css } from 'styled-components';
 import { ReactComponent as RefreshSvg } from '../../../assets/styles/refresh.svg';
 
 interface PWorkInformationProps {
-  orderedDatetime: string;
-  dudate: string;
+  orderedDatetime: string | undefined;
+  dudate: string | undefined;
   assignee: string;
   isSpin: boolean;
   refresh: () => void;

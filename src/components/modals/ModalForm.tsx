@@ -4,6 +4,7 @@ import useStore from '../../hooks/useStore';
 
 interface buttonProps {
   color: 'purple' | 'white';
+  hoverColor: '#EEEEEE' | '#4739C1';
 }
 
 interface modalContent {
@@ -33,10 +34,10 @@ const ModalForm = ({ content }: modalProps) => {
           ))}
         </SubDescriptionBox>
         <ButtonBox>
-          <Button color="white" onClick={onClose}>
+          <Button color="white" hoverColor="#EEEEEE" onClick={onClose}>
             아니오
           </Button>
-          <Button color="purple" onClick={actionButton}>
+          <Button color="purple" hoverColor="#4739C1" onClick={actionButton}>
             예
           </Button>
         </ButtonBox>
@@ -46,7 +47,8 @@ const ModalForm = ({ content }: modalProps) => {
 };
 
 const Background = styled.div`
-  position: absolute;
+  position: fixed;
+  top: 0;
   width: 100vmax;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.4);
@@ -74,6 +76,7 @@ const SubDescription = styled.p`
   color: ${({ theme }) => theme.color.gray};
   font-size: 11px;
   line-height: 1.4545454545;
+  text-align: center;
 `;
 
 const SubDescriptionBox = styled.div`
@@ -94,6 +97,10 @@ const Button = styled.button<buttonProps>`
     color === 'purple' ? theme.color.white : theme.color.black};
   font-size: 14px;
   line-height: 1.5714285714;
+
+  :hover {
+    background-color: ${({ hoverColor }) => hoverColor};
+  }
 `;
 
 export default ModalForm;

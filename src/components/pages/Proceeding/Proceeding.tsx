@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useObserver } from 'mobx-react-lite';
+import useDate from 'hooks/useDate';
+import useStore from 'hooks/useStore';
+import usePermission from 'hooks/usePermission';
+import FetchData from '../../../service/fetch';
 import Exhaustion from './Exhaustion';
+import Expiration from './Expiration';
 import PBtnBox from './PBtnBox';
 import PLoginBox from './PLoginBox';
 import PNoRequest from './PNoRequest';
@@ -8,59 +14,63 @@ import PNotice from './PNotice';
 import PSubscribeBox from './PSubscribeBox';
 import PWorkInformationBox from './PWorkInformationBox';
 import PWorkStatusBox from './PWorkStatusBox';
+import ModalForm from '../../modals/ModalForm';
+import Portal from '../../modals/Portal';
+
+interface processingData {
+  assigneeNickname: string;
+  dueDate: string;
+  orderId: string;
+  orderState: number;
+  orderStateContent: string;
+  orderedAt: string;
+  remainingEditCount: number;
+}
 
 interface userData {
   name: string;
-  orderable_cnt: number;
-  ordered_at_datetime: string;
-  due_data: string;
-  assignee: string;
-  state: 0 | 1 | 2 | 3 | 4 | 5 | 6;
-  start: string;
-  end: string;
+  subscribeStart: string;
+  subscribeEnd: string;
+  orderableCount: number;
+  simpleNotify: '';
 }
 
-interface emogiData {
-  0: [string, string];
-  1: [string, string];
-  2: [string, string];
-  3: [string, string];
-  4: [string, string];
-  5: [string, string];
-  6: [string, string];
+interface backgroundProps {
+  isLong: boolean;
 }
 
 const Proceeding = () => {
-  const [users, setUsers] = useState<userData>({
-    name: '',
-    orderable_cnt: 0,
-    ordered_at_datetime: '',
-    due_data: '',
-    assignee: '',
-    state: 1,
-    start: '',
-    end: '',
+  const [processing, setProcessing] = useState<processingData>({
+    assigneeNickname: '',
+    dueDate: '',
+    orderId: '',
+    orderState: 0,
+    orderStateContent: '',
+    orderedAt: '',
+    remainingEditCount: 0,
   });
-  const [number, setUsernumber] = useState<number>(0);
+
   const [isSpin, setSpin] = useState<boolean>(false);
 
-  const EMOGIDATA: emogiData = {
-    0: ['', ''],
-    1: ['🤔', '영상에 알맞는 편집자를 배정 중입니다.'],
-    2: ['👀', '배정된 편집자가 영상을 열심히 확인하고 있어요'],
-    3: ['😍️', '영상을 이쁘게 자르고 붙이는 중'],
-    4: ['🎇️', '아주 환상적인 이펙트를 입히는 중입니다.'],
-    5: ['😘️', '영상편집이 완료되었습니다'],
-    6: ['🛠️', '요청하신 수정사항을 작업중입니다.'],
-  };
+  const [user, setUser] = useState<userData>({
+    name: '',
+    subscribeStart: '',
+    subscribeEnd: '',
+    orderableCount: 0,
+    simpleNotify: '',
+  });
+
+  const { modal } = useStore();
+
+  const { handleDate, handleTime } = useDate();
+
+  const { checkToken } = usePermission();
+
+  const fetch = new FetchData();
 
   const fetchData = () => {
-    fetch(`/data/proceeding${number}.json`)
-      .then((res) => res.json())
-      .then((users) => {
-        setUsers(users);
-      });
-    setUsernumber(number + 1);
+    fetch.requestData().then((res) => setProcessing(res));
+    fetch.requestUser().then((res) => setUser(res));
   };
 
   const spinner = () => {
@@ -74,42 +84,74 @@ const Proceeding = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    checkToken();
+  }, []);
+
+  const renderSubscribeBox = (notify: string) => {
+    switch (notify) {
+      case 'NEED_BUY_SUBSCRIBE':
+        return <Expiration />;
+        break;
+      case 'NEED_BUY_ONE_EDIT':
+        return <Exhaustion />;
+        break;
+      case 'NONE':
+        return (
+          <PSubscribeBox
+            start={handleDate(user.subscribeStart)}
+            end={handleDate(user.subscribeEnd)}
+            orderedCnt={processing.remainingEditCount}
+          />
+        );
+        break;
+      default:
+        return <Expiration />;
+        break;
+    }
+  };
+
+  const MODAL = {
+    description: '해당 의뢰건을 완료할까요?',
+    subDescription:
+      '완료 결정 후\n 더이상 수정요청을 하실 수 없습니다. \n 한번 더 확인 후 결졍해주세요.',
+    actionButton: () => {
+      fetch.requestComplete().then((res) => res);
+      modal.closeModal();
+      fetchData();
+    },
+  };
+
   return (
-    <Background>
+    <Background isLong={processing.orderState > 3}>
       <Container>
         <Header>
           <img src="./images/Logo.png" alt="editfolio" />
         </Header>
         <Main>
-          <PLoginBox name={users.name} />
-          {users.orderable_cnt > 0 ? (
-            <PSubscribeBox
-              start={users.start}
-              end={users.end}
-              orderedCnt={users.orderable_cnt}
-            />
-          ) : (
-            <Exhaustion />
+          <PLoginBox name={user.name} />
+          {renderSubscribeBox(user.simpleNotify)}
+          {processing.orderState < 0 && user.orderableCount > 0 && (
+            <PNoRequest />
           )}
-          {users.state === 0 && users.orderable_cnt > 0 && <PNoRequest />}
-          {users.state > 0 && (
+          {processing.orderState > 0 && user.orderableCount > 0 && (
             <>
               <PWorkInformationBox
-                orderedDatetime={users.ordered_at_datetime}
-                dudate={users.due_data}
-                assignee={users.assignee}
+                orderedDatetime={handleTime(processing.orderedAt)}
+                dudate={handleDate(processing.dueDate)}
+                assignee={processing.assigneeNickname}
                 isSpin={isSpin}
                 refresh={fetchData}
                 spinner={spinner}
               />
               <PWorkStatusBox
-                stateEmogi={EMOGIDATA[users.state][0]}
-                stateText={EMOGIDATA[users.state][1]}
+                status={processing.orderState && processing.orderState}
               />
             </>
           )}
         </Main>
-        {users.state > 4 && (
+
+        {processing.orderState > 3 && (
           <Footer>
             <FooterLine />
             <PNotice />
@@ -117,13 +159,22 @@ const Proceeding = () => {
           </Footer>
         )}
       </Container>
+      {useObserver(
+        () =>
+          modal.isShow && (
+            <Portal>
+              <ModalForm content={MODAL} />
+            </Portal>
+          ),
+      )}
     </Background>
   );
 };
 
-const Background = styled.div`
+const Background = styled.div<backgroundProps>`
+  position: relative;
   width: 100%;
-  height: 100vh;
+  height: ${({ isLong }) => (isLong ? '100%' : '100vh')};
   background-color: #dee4ed;
 `;
 
