@@ -2,6 +2,7 @@ import { createGlobalStyle } from 'styled-components';
 import { normalize } from 'styled-normalize';
 
 const GlobalStyle = createGlobalStyle`
+@import url("https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css");
   ${normalize}
 
   body,
@@ -39,7 +40,6 @@ main {
   padding: 0;
   border: 0;
   font-size: 100%;
-  font: inherit;
 }
 ol,
 ul,
@@ -96,6 +96,7 @@ table {
 
   * {
     box-sizing: border-box;
+    font-family: "Spoqa Han Sans Neo", "sans-serif";
   }
 `;
 
