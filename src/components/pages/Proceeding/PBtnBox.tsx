@@ -4,15 +4,18 @@ import useStore from 'hooks/useStore';
 
 interface PDtnBoxProps {
   remainingEditCount?: number;
+  requestEdit: () => void;
 }
 
-const PBtnBox = ({ remainingEditCount }: PDtnBoxProps) => {
+const PBtnBox = ({ remainingEditCount, requestEdit }: PDtnBoxProps) => {
   const { modal } = useStore();
 
   return (
     <>
       <BtnBox>
-        <FixRequestBtn>수정 요청({remainingEditCount})</FixRequestBtn>
+        <FixRequestBtn onClick={() => requestEdit()}>
+          수정 요청({remainingEditCount})
+        </FixRequestBtn>
         <FixNoneBtn
           onClick={() => {
             modal.openModal();
@@ -21,7 +24,9 @@ const PBtnBox = ({ remainingEditCount }: PDtnBoxProps) => {
           수정사항 없음
         </FixNoneBtn>
       </BtnBox>
-      <Additional>추가 수정 결제</Additional>
+      <Additional href="https://editfolio.ai/shop_view/?idx=21" target="_self">
+        추가 수정 결제
+      </Additional>
     </>
   );
 };
@@ -57,7 +62,7 @@ const FixNoneBtn = styled.button`
   background-color: #5d4ee8;
 `;
 
-const Additional = styled.button`
+const Additional = styled.a`
   display: flex;
   text-align: center;
   justify-content: center;

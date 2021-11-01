@@ -42,17 +42,19 @@ interface backgroundProps {
   isLong: boolean;
 }
 
+const initProcessing = {
+  assigneeNickname: null,
+  dueDate: null,
+  orderId: '',
+  orderState: 0,
+  orderStateContent: '',
+  orderStateEmoji: '',
+  orderedAt: '',
+  remainingEditCount: 0,
+};
+
 const Proceeding = () => {
-  const [processing, setProcessing] = useState<processingData>({
-    assigneeNickname: null,
-    dueDate: null,
-    orderId: '',
-    orderState: 0,
-    orderStateContent: '',
-    orderStateEmoji: '',
-    orderedAt: '',
-    remainingEditCount: 0,
-  });
+  const [processing, setProcessing] = useState<processingData>(initProcessing);
 
   const [isSpin, setSpin] = useState<boolean>(false);
 
@@ -98,22 +100,19 @@ const Proceeding = () => {
     switch (notify) {
       case 'NEED_BUY_SUBSCRIBE':
         return <Expiration />;
-        break;
       case 'NEED_BUY_ONE_EDIT':
-        return <Exhaustion />;
-        break;
       case 'NONE':
-        return (
+        return processing.orderState > 0 ? (
           <PSubscribeBox
             start={handleDate(user.subscribeStart)}
             end={handleDate(user.subscribeEnd)}
             orderedCnt={user.remainingOrderCount}
           />
+        ) : (
+          <Exhaustion />
         );
-        break;
       default:
         return <Expiration />;
-        break;
     }
   };
 
@@ -123,8 +122,9 @@ const Proceeding = () => {
       '완료 결정 후\n 더이상 수정요청을 하실 수 없습니다. \n 한번 더 확인 후 결졍해주세요.',
     actionButton: () => {
       fetch.requestComplete().then((res) => res);
+      setProcessing(initProcessing);
+      fetch.requestUser().then((res) => setUser(res));
       modal.closeModal();
-      fetchData();
     },
   };
 
@@ -137,10 +137,10 @@ const Proceeding = () => {
         <Main>
           <PLoginBox name={user.name} />
           {renderSubscribeBox(user.simpleNotify)}
-          {processing.orderState < 0 && user.remainingOrderCount > 0 && (
+          {user.remainingOrderCount > 0 && processing.orderState === 0 && (
             <PNoRequest />
           )}
-          {processing.orderState > 0 && user.remainingOrderCount > 0 && (
+          {processing.orderState > 0 && (
             <>
               <PWorkInformationBox
                 orderedDatetime={handleTime(processing.orderedAt)}
@@ -157,12 +157,14 @@ const Proceeding = () => {
             </>
           )}
         </Main>
-
         {processing.orderState > 3 && (
           <Footer>
             <FooterLine />
             <PNotice />
-            <PBtnBox remainingEditCount={processing.remainingEditCount} />
+            <PBtnBox
+              remainingEditCount={processing.remainingEditCount}
+              requestEdit={() => fetch.requestEdit()}
+            />
           </Footer>
         )}
       </Container>

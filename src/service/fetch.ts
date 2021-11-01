@@ -33,7 +33,7 @@ class FetchData {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
-        Authorization: `Bearer${localStorage.getItem('edit-token')}` as string,
+        Authorization: `Bearer ${localStorage.getItem('edit-token')}` as string,
       },
       body: JSON.stringify({
         requirement,
@@ -46,7 +46,7 @@ class FetchData {
       method: 'GET',
       headers: {
         'Content-type': 'application/json',
-        Authorization: `Bearer${localStorage.getItem('edit-token')}` as string,
+        Authorization: `Bearer ${localStorage.getItem('edit-token')}` as string,
       },
     }).then((res) => res.json());
   };
@@ -56,10 +56,19 @@ class FetchData {
       method: 'GET',
       headers: {
         'Content-type': 'application/json',
-        Authorization: `Bearer${localStorage.getItem('edit-token')}` as string,
+        Authorization: `Bearer ${localStorage.getItem('edit-token')}` as string,
       },
     }).then((res) => res.json());
   };
+
+  requestEdit = () =>
+    fetch(`${BASE_URL}/order/recent-processing/edit`, {
+      method: `POST`,
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('edit-token')}` as string,
+      },
+    }).then((res) => res.json());
 
   // mock
   // requestUser = () => {

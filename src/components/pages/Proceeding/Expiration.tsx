@@ -8,7 +8,9 @@ const Exhaustion = () => {
       <SubDescription>
         구독권을 구매하여 영상편집 의뢰를 시작해보세요!
       </SubDescription>
-      <Button>구독권 구매하러 가기</Button>
+      <Link href="https://editfolio.ai/editmenu/?idx=4" target="_self">
+        구독권 구매하러 가기
+      </Link>
     </Container>
   );
 };
@@ -37,7 +39,7 @@ const SubDescription = styled.p`
   text-align: center;
 `;
 
-const Button = styled.button`
+const Link = styled.a`
   width: 336px;
   margin-bottom: 388px;
   padding: 13px;
@@ -46,6 +48,7 @@ const Button = styled.button`
   color: ${({ theme }) => theme.color.white};
   font-size: 14px;
   font-weight: 700;
+  text-align: center;
 `;
 
 export default Exhaustion;
