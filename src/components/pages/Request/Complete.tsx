@@ -21,13 +21,16 @@ const Complete = () => {
 };
 
 const Container = styled.div`
+  width: 100%;
+  min-height: calc(100vh - 73px);
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 86px 12px 12px;
 `;
 
 const Description = styled.p`
-  margin-bottom: 8px;
+  margin-top: 24px;
   color: ${({ theme }) => theme.color.black};
   font-size: 18px;
   line-height: 1.4444444444;
@@ -35,22 +38,22 @@ const Description = styled.p`
 `;
 
 const SubDescription = styled.p`
+  margin-top: 8px;
   color: ${({ theme }) => theme.color.gray};
   font-size: 12px;
   line-height: 1.5;
 `;
 
 const Button = styled.button`
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  width: 336px;
+  width: 100%;
   height: 48px;
-  margin-bottom: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: auto;
   background-color: ${({ theme }) => theme.color.purple};
   border-radius: 6px;
   color: ${({ theme }) => theme.color.white};
-  transform: translateX(-50%);
 `;
 
 export default Complete;

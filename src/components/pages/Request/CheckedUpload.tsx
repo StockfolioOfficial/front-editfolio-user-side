@@ -7,6 +7,7 @@ interface checkedProps {
   handleSubmit: (submitAction: () => void) => void;
   reset: () => void;
   requirement: string;
+  openOneDrive: () => void;
 }
 
 interface ButtonStyle {
@@ -18,12 +19,15 @@ const CheckedUpload = ({
   handleSuccess,
   reset,
   requirement,
+  openOneDrive,
 }: checkedProps) => {
   const fetch = new FetchData();
   const newRequirement = requirement.length === 0 ? '없음' : requirement;
   return (
     <>
-      <Button backColor="skyblue">업로드 확인</Button>
+      <Button backColor="skyblue" onClick={() => openOneDrive()}>
+        업로드 확인
+      </Button>
       <RequirementTitle># 요구사항</RequirementTitle>
       <RequirementContent>
         {requirement.length === 0 ? '없음' : requirement}

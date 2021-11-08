@@ -12,7 +12,7 @@ const Exhaustion = () => {
         추가적인 의뢰는 1회 편집권을 구매하여
         <br /> 영상편집 의뢰가 가능합니다.
       </SubDescription>
-      <Link href="https://editfolio.ai/editmenu/?idx=5" target="_self">
+      <Link href="https://editfolio.ai/editmenu/?idx=5" target="_blank">
         1회 편집권 구매하러 가기
       </Link>
     </Container>
@@ -44,9 +44,11 @@ const SubDescription = styled.p`
 `;
 
 const Link = styled.a`
-  width: 336px;
-  margin-bottom: 344px;
-  padding: 13px;
+  width: 100%;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: ${({ theme }) => theme.color.mint};
   border-radius: 6px;
   color: ${({ theme }) => theme.color.white};

@@ -8,6 +8,17 @@ export interface LoginValueType {
   [key: string]: string;
 }
 
+export interface OrderModal {
+  assigneeNickname?: string;
+  dueDate?: string;
+  orderId: string;
+  orderState: number;
+  orderStateContent: string;
+  orderStateEmoji: string;
+  orderedAt: string;
+  remainingEditCount: number;
+}
+
 class FetchData {
   login = async (values: LoginValueType) => {
     try {
@@ -28,8 +39,8 @@ class FetchData {
     }
   };
 
-  requirement = (requirement: string) => {
-    return fetch(`${BASE_URL}/order`, {
+  requirement = async (requirement: string) => {
+    const reqRes = await fetch(`${BASE_URL}/order`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
@@ -39,36 +50,44 @@ class FetchData {
         requirement,
       }),
     });
+    return reqRes;
   };
 
-  requestData = () => {
-    return fetch(`${BASE_URL}/order/recent-processing`, {
+  requestData = async () => {
+    const dataRes = await fetch(`${BASE_URL}/order/recent-processing`, {
+      method: 'GET',
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('edit-token')}` as string,
+      },
+    }).then<Partial<OrderModal> | undefined>((res) => {
+      if (res.status === 200) return res.json();
+      if (res.ok) return {};
+      return undefined;
+    });
+    return dataRes;
+  };
+
+  requestUser = async () => {
+    const userRes = await fetch(`${BASE_URL}/customer/me`, {
       method: 'GET',
       headers: {
         'Content-type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('edit-token')}` as string,
       },
     }).then((res) => res.json());
+    return userRes;
   };
 
-  requestUser = () => {
-    return fetch(`${BASE_URL}/customer/me`, {
-      method: 'GET',
-      headers: {
-        'Content-type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('edit-token')}` as string,
-      },
-    }).then((res) => res.json());
-  };
-
-  requestEdit = () =>
-    fetch(`${BASE_URL}/order/recent-processing/edit`, {
+  requestEdit = async () => {
+    await fetch(`${BASE_URL}/order/recent-processing/edit`, {
       method: `POST`,
       headers: {
         'Content-type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('edit-token')}` as string,
       },
-    }).then((res) => res.json());
+    });
+  };
 
   // mock
   // requestUser = () => {

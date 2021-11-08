@@ -4,8 +4,7 @@ import { useObserver } from 'mobx-react-lite';
 import useDate from 'hooks/useDate';
 import useStore from 'hooks/useStore';
 import usePermission from 'hooks/usePermission';
-import FetchData from '../../../service/fetch';
-import Exhaustion from './Exhaustion';
+import FetchData, { OrderModal } from '../../../service/fetch';
 import Expiration from './Expiration';
 import PBtnBox from './PBtnBox';
 import PLoginBox from './PLoginBox';
@@ -17,17 +16,6 @@ import PWorkStatusBox from './PWorkStatusBox';
 import ModalForm from '../../modals/ModalForm';
 import Portal from '../../modals/Portal';
 
-interface processingData {
-  assigneeNickname: string | null;
-  dueDate: string | null;
-  orderId: string;
-  orderState: number;
-  orderStateContent: string;
-  orderStateEmoji: string;
-  orderedAt: string;
-  remainingEditCount: number;
-}
-
 interface userData {
   userId: string;
   name: string;
@@ -35,7 +23,7 @@ interface userData {
   subscribeStart: string;
   subscribeEnd: string;
   remainingOrderCount: number;
-  simpleNotify: '';
+  simpleNotify: string;
 }
 
 interface backgroundProps {
@@ -43,8 +31,6 @@ interface backgroundProps {
 }
 
 const initProcessing = {
-  assigneeNickname: null,
-  dueDate: null,
   orderId: '',
   orderState: 0,
   orderStateContent: '',
@@ -54,7 +40,7 @@ const initProcessing = {
 };
 
 const Proceeding = () => {
-  const [processing, setProcessing] = useState<processingData>(initProcessing);
+  const [processing, setProcessing] = useState<OrderModal>(initProcessing);
 
   const [isSpin, setSpin] = useState<boolean>(false);
 
@@ -74,11 +60,14 @@ const Proceeding = () => {
 
   const { checkToken } = usePermission();
 
-  const fetch = new FetchData();
+  const { requestData, requestUser, requestComplete, requestEdit } =
+    new FetchData();
 
-  const fetchData = () => {
-    fetch.requestData().then((res) => setProcessing(res));
-    fetch.requestUser().then((res) => setUser(res));
+  const fetchData = async () => {
+    await requestData().then((res) => {
+      if (res && res.orderId) setProcessing(res as OrderModal);
+    });
+    await requestUser().then((res) => setUser(res));
   };
 
   const spinner = () => {
@@ -98,32 +87,34 @@ const Proceeding = () => {
 
   const renderSubscribeBox = (notify: string) => {
     switch (notify) {
-      case 'NEED_BUY_SUBSCRIBE':
-        return <Expiration />;
       case 'NEED_BUY_ONE_EDIT':
       case 'NONE':
-        return processing.orderState > 0 ? (
+        return (
           <PSubscribeBox
             start={handleDate(user.subscribeStart)}
             end={handleDate(user.subscribeEnd)}
             orderedCnt={user.remainingOrderCount}
           />
-        ) : (
-          <Exhaustion />
         );
       default:
         return <Expiration />;
     }
   };
 
+  async function clickRequestEdit() {
+    await requestEdit();
+    await fetchData();
+    window.alert('수정요청이 되었습니다.');
+  }
+
   const MODAL = {
     description: '해당 의뢰건을 완료할까요?',
     subDescription:
       '완료 결정 후\n 더이상 수정요청을 하실 수 없습니다. \n 한번 더 확인 후 결졍해주세요.',
-    actionButton: () => {
-      fetch.requestComplete().then((res) => res);
+    actionButton: async () => {
+      await requestComplete();
       setProcessing(initProcessing);
-      fetch.requestUser().then((res) => setUser(res));
+      requestUser().then((res) => setUser(res));
       modal.closeModal();
     },
   };
@@ -137,10 +128,10 @@ const Proceeding = () => {
         <Main>
           <PLoginBox name={user.name} />
           {renderSubscribeBox(user.simpleNotify)}
-          {user.remainingOrderCount > 0 && processing.orderState === 0 && (
-            <PNoRequest />
+          {user.remainingOrderCount > 0 && processing.orderId === '' && (
+            <PNoRequest oneDriveLink={user.onedriveLink} />
           )}
-          {processing.orderState > 0 && (
+          {processing.orderState > 0 && user.simpleNotify === 'NONE' && (
             <>
               <PWorkInformationBox
                 orderedDatetime={handleTime(processing.orderedAt)}
@@ -156,17 +147,17 @@ const Proceeding = () => {
               />
             </>
           )}
+          {processing.orderState > 4 && (
+            <EditSection>
+              <PNotice />
+              <PBtnBox
+                remainingEditCount={processing.remainingEditCount}
+                requestEdit={() => clickRequestEdit()}
+                isEditing={processing.orderState === 7}
+              />
+            </EditSection>
+          )}
         </Main>
-        {processing.orderState > 3 && (
-          <Footer>
-            <FooterLine />
-            <PNotice />
-            <PBtnBox
-              remainingEditCount={processing.remainingEditCount}
-              requestEdit={() => fetch.requestEdit()}
-            />
-          </Footer>
-        )}
       </Container>
       {useObserver(
         () =>
@@ -181,13 +172,13 @@ const Proceeding = () => {
 };
 
 const Background = styled.div<backgroundProps>`
-  position: relative;
   width: 100%;
-  height: ${({ isLong }) => (isLong ? '100%' : '100vh')};
+  min-height: 100vh;
+  position: relative;
   background-color: #dee4ed;
 `;
 
-const Container = styled.section`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 360px;
@@ -198,25 +189,22 @@ const Header = styled.header`
   height: 60px;
   padding: 15px 0 0 18px;
   background-color: ${({ theme }) => theme.color.white};
-
-  & img {
-    cursor: pointer;
-  }
 `;
 
 const Main = styled.main`
+  min-height: calc(100vh - 60px);
+  padding-bottom: 60px;
   background-color: rgb(246, 248, 250);
+
+  > div,
+  > section {
+    padding: 0 12px;
+  }
 `;
 
-const Footer = styled.footer`
+const EditSection = styled.section`
+  margin-top: 24px;
   background-color: rgb(246, 248, 250);
-`;
-
-const FooterLine = styled.div`
-  width: 336px;
-  height: 1px;
-  margin-left: 12px;
-  border-top: 1px solid #becbd8;
 `;
 
 export default Proceeding;

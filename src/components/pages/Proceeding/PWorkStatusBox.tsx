@@ -11,27 +11,22 @@ const PWorkStatusBox = ({ content, emoji }: WorkStatusBoxProps) => {
   const { handleLineChange } = useTypo();
 
   return (
-    <>
-      <WorkInformationTitle>
-        <Title>작업상태</Title>
-      </WorkInformationTitle>
+    <Root>
+      <Title>작업상태</Title>
       <WorkStatusBox>
         <Emogi>{emoji}</Emogi>
         <WorkStatus>{handleLineChange(content)}</WorkStatus>
       </WorkStatusBox>
-    </>
+    </Root>
   );
 };
 
-const WorkInformationTitle = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 312px;
-  height: 34px;
-  margin: 24px 24px 0 24px;
+const Root = styled.div`
+  margin-top: 32px;
 `;
 
-const Title = styled.span`
+const Title = styled.div`
+  margin: 0 0 12px 12px;
   font-size: 16px;
   line-height: 24px;
   font-weight: 700;
@@ -40,27 +35,23 @@ const Title = styled.span`
 const WorkStatusBox = styled.div`
   display: flex;
   flex-direction: column;
-  text-align: center;
-  width: 336px;
-  height: 204px;
-  margin: 0 12px 24px 12px;
+  padding: 32px 0;
   border-radius: 16px;
   background-color: #ffffff;
+  text-align: center;
 `;
 
-const Emogi = styled.span`
-  margin: 32px 0 16px;
+const Emogi = styled.p`
+  margin-bottom: 16px;
   font-size: 100px;
 `;
 
-const WorkStatus = styled.div`
+const WorkStatus = styled.p`
   height: 44px;
   font-size: 14px;
   font-weight: 700;
   line-height: 22px;
-  margin: 0 auto;
   color: #5d4ee8;
-  text-align: center;
 `;
 
 export default PWorkStatusBox;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useObserver } from 'mobx-react-lite';
 import styled from 'styled-components';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import useInputs from 'hooks/useInputs';
 import useStore from 'hooks/useStore';
 import usePermission from 'hooks/usePermission';
@@ -13,6 +13,10 @@ import RequestHeader from './RequestHeader';
 import Requirement from './Requirement';
 import Step from './Step';
 import Upload from './Upload';
+
+interface ParamsType {
+  oneDriveLink: string | undefined;
+}
 
 const Request = () => {
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -27,18 +31,37 @@ const Request = () => {
   const { modal } = useStore();
 
   const history = useHistory();
+  const { state } = useLocation<ParamsType>();
 
   useEffect(() => {
     checkToken();
   }, []);
+
+  function openOneDrive() {
+    if (!state.oneDriveLink) {
+      window.alert(
+        '아직 업로드 공간이 준비되지 않았습니다.\n고객센터에 연락해주세요.',
+      );
+      window.open('https://pf.kakao.com/_JAKbs/chat');
+      history.push('/main');
+      return false;
+    }
+    const isHttps = /^https:/.test(state.oneDriveLink as string);
+    window.open(isHttps ? state.oneDriveLink : `https://${state.oneDriveLink}`);
+    return true;
+  }
 
   const handleNextStep = () => {
     if (step === 2 && values.requirement.length === 0) {
       modal.openModal();
       return;
     }
-    const nextStep = step === 1 ? 2 : 3;
-    setStep(nextStep);
+    let isStop = false;
+    if (step === 1) {
+      isStop = !openOneDrive();
+    }
+    if (isStop) return;
+    setStep(step === 1 ? 2 : 3);
   };
 
   const handlePrevStep = () => {
@@ -76,6 +99,7 @@ const Request = () => {
         handleSuccess={handleSuccess}
         reset={reset}
         requirement={values.requirement}
+        openOneDrive={() => openOneDrive()}
       />
     ),
   };
@@ -122,12 +146,11 @@ const Background = styled.div`
 `;
 
 const Container = styled.section`
-  position: relative;
   display: flex;
+  max-width: 360px;
+  min-height: 100vh;
   flex-direction: column;
   align-items: center;
-  width: 360px;
-  height: 760px;
   margin: 0 auto;
   background-color: ${({ theme }) => theme.color.white};
 `;

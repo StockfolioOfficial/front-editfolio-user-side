@@ -2,11 +2,16 @@ import React from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
-const PNoRequest = () => {
-  const history = useHistory();
+interface PNoRequestProps {
+  oneDriveLink?: string;
+}
 
+const PNoRequest = ({ oneDriveLink }: PNoRequestProps) => {
+  const history = useHistory();
   const goToRequest = () => {
-    history.push('/request');
+    history.push('/request', {
+      oneDriveLink,
+    });
   };
 
   return (
@@ -20,15 +25,19 @@ const PNoRequest = () => {
   );
 };
 
+PNoRequest.defaultProps = {
+  oneDriveLink: undefined,
+};
+
 const NoRequest = styled.div`
   display: flex;
   flex-direction: column;
+  margin: 60px 0 32px;
 `;
 
 const NoProceedingText = styled.div`
-  width: 270px;
   height: 26px;
-  margin: 60px 45px 8px 45px;
+  margin-bottom: 8px;
   font-size: 18px;
   font-weight: 700;
   text-align: center;
@@ -36,9 +45,8 @@ const NoProceedingText = styled.div`
 `;
 
 const StateProceedingText = styled.div`
-  width: 251px;
   height: 18px;
-  margin: 0 54px 55px 54px;
+  margin-bottom: 58px;
   font-size: 12px;
   font-weight: 400;
   line-height: 18px;
@@ -47,12 +55,10 @@ const StateProceedingText = styled.div`
 `;
 
 const RequestButton = styled.button`
-  width: 336px;
   height: 48px;
   background-color: #5d4ee8;
   border-radius: 6px;
   border: none;
-  margin: 0px 12px 238px 12px;
   font-size: 14px;
   font-weight: 700;
   line-height: 22px;
