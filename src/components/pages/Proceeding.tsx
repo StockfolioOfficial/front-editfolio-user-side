@@ -126,9 +126,7 @@ const Proceeding = () => {
             <PWorkStatusBox
               content={processing.orderStateContent}
               emoji={processing.orderStateEmoji}
-              isNoLink={
-                !!(processing.linkList && processing.linkList.length > 0)
-              }
+              links={processing.linkList}
             />
             {processing.orderState > 4 && (
               <EditSection>
@@ -150,6 +148,11 @@ const Proceeding = () => {
       </>
     );
   };
+
+  useEffect(() => {
+    if (localStorage.getItem('editfolio-token')) return;
+    history.push('/');
+  }, []);
 
   return (
     <Background isLong={processing.orderState > 3}>

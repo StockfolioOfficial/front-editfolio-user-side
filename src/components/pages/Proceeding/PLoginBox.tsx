@@ -10,7 +10,7 @@ const PLoginBox = ({ name }: Login) => {
   const history = useHistory();
 
   const handleLogout = () => {
-    localStorage.removeItem('edit-token');
+    localStorage.removeItem('editfolio-token');
     history.push('/');
   };
 

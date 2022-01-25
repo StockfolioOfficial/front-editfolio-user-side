@@ -4,9 +4,11 @@ import styled from 'styled-components';
 const Exhaustion = () => {
   return (
     <Container>
-      <Description>구독권이 만료되었습니다.</Description>
+      <Description>이용권이 없습니다.</Description>
       <SubDescription>
-        구독권을 구매하여 영상편집 의뢰를 시작해보세요!
+        구독권이나 충전권을 구매하여
+        <br />
+        영상편집 의뢰를 시작해보세요!
       </SubDescription>
       <Link href="https://editfolio.ai/editmenu/?idx=4" target="_blank">
         구독권 구매하러 가기

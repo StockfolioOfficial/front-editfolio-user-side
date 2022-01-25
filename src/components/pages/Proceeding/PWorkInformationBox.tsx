@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { ReactComponent as RefreshSvg } from '../../../assets/styles/refresh.svg';
 
@@ -6,9 +6,7 @@ interface PWorkInformationProps {
   orderedDatetime: string | undefined;
   dudate: string | undefined;
   assignee: string;
-  isSpin: boolean;
   refresh: () => void;
-  spinner: () => void;
 }
 
 interface refresh {
@@ -20,9 +18,14 @@ const PWorkInformationBox = ({
   dudate,
   assignee,
   refresh,
-  isSpin,
-  spinner,
 }: PWorkInformationProps) => {
+  const [isSpin, setSpin] = useState<boolean>(false);
+  const spinner = () => {
+    setSpin(true);
+    setTimeout(() => {
+      setSpin(false);
+    }, 2000);
+  };
   return (
     <WorkInformationBox>
       <WorkInformationTitle>
@@ -31,9 +34,7 @@ const PWorkInformationBox = ({
           <RefreshButton
             isSpin={isSpin}
             onClick={() => {
-              if (isSpin) {
-                return;
-              }
+              if (isSpin) return;
               refresh();
               spinner();
             }}
@@ -51,9 +52,7 @@ const PWorkInformationBox = ({
         </OrderBox>
         <OrderBox>
           <Order>담당 편집자</Order>
-          <OrderAssignee noData={assignee === undefined || assignee === ''}>
-            {assignee}
-          </OrderAssignee>
+          <OrderAssignee noData={!!assignee}>{assignee}</OrderAssignee>
         </OrderBox>
       </WorkInformation>
     </WorkInformationBox>
@@ -128,7 +127,7 @@ const OrderInfo = styled.span`
 `;
 
 const OrderAssignee = styled(OrderInfo)<{ noData?: boolean }>`
-  color: ${({ noData }) => (!noData ? '#6ab4f7' : '#6ab4f7')};
+  color: ${({ noData }) => (!noData ? '#6ab4f7' : '#BECBD8')};
 `;
 
 export default PWorkInformationBox;

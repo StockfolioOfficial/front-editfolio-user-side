@@ -8,6 +8,16 @@ export interface LoginValueType {
   [key: string]: string;
 }
 
+export interface UserData {
+  userId: string;
+  name: string;
+  subscribeStart: string;
+  subscribeEnd: string;
+  remainingOrderCount: number;
+  simpleNotify: string;
+  onedriveLink: string;
+}
+
 export interface OrderModal {
   assigneeNickname?: string;
   dueDate?: string;
@@ -17,6 +27,7 @@ export interface OrderModal {
   orderStateEmoji: string;
   orderedAt: string;
   remainingEditCount: number;
+  linkList?: string[];
 }
 
 class FetchData {
@@ -62,18 +73,26 @@ class FetchData {
   };
 
   requestData = async () => {
-    const dataRes = await fetch(`${BASE_URL}/order/recent-processing`, {
-      method: 'GET',
-      headers: {
-        'Content-type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('edit-token')}` as string,
-      },
-    }).then<Partial<OrderModal> | undefined>((res) => {
-      if (res.status === 200) return res.json();
-      if (res.ok) return {};
+    const token = localStorage.getItem('editfolio-token');
+
+    if (!token) return undefined;
+
+    try {
+      const dataRes = await fetch(`${BASE_URL}/order/recent-processing`, {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }).then<OrderModal | undefined>((res) => {
+        if (res.ok) return res.json();
+        return undefined;
+      });
+      return dataRes;
+    } catch (err) {
+      console.error(err);
       return undefined;
-    });
-    return dataRes;
+    }
   };
 
   requestUser = async () => {

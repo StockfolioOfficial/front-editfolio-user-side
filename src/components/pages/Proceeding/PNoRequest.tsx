@@ -3,14 +3,16 @@ import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
 interface PNoRequestProps {
-  oneDriveLink?: string;
+  cloudLink?: string;
+  orderedCnt?: number;
 }
 
-const PNoRequest = ({ oneDriveLink }: PNoRequestProps) => {
+const PNoRequest = ({ cloudLink, orderedCnt }: PNoRequestProps) => {
   const history = useHistory();
+
   const goToRequest = () => {
     history.push('/request', {
-      oneDriveLink,
+      cloudLink,
     });
   };
 
@@ -20,13 +22,16 @@ const PNoRequest = ({ oneDriveLink }: PNoRequestProps) => {
       <StateProceedingText>
         아래 제작 의뢰를 눌러 영상편집 의뢰를 시작하세요.
       </StateProceedingText>
-      <RequestButton onClick={goToRequest}>제작 의뢰</RequestButton>
+      {orderedCnt && orderedCnt > 0 && (
+        <RequestButton onClick={goToRequest}>제작 의뢰</RequestButton>
+      )}
     </NoRequest>
   );
 };
 
 PNoRequest.defaultProps = {
-  oneDriveLink: undefined,
+  cloudLink: undefined,
+  orderedCnt: undefined,
 };
 
 const NoRequest = styled.div`

@@ -3,11 +3,14 @@ import React from 'react';
 const useTypo = () => {
   const handleLineChange = (longWord: string) => {
     return (
-      <>
-        {longWord.split('\n').map((word: string) => (
-          <p key={word}>{word}</p>
+      <p>
+        {longWord.split('\n').map((word: string, i) => (
+          <>
+            {i !== 0 && <br />}
+            <span key={`line ${i + 1} - ${word}`}>{word}</span>
+          </>
         ))}
-      </>
+      </p>
     );
   };
 

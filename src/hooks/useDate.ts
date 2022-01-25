@@ -2,26 +2,14 @@ import { useCallback } from 'react';
 
 const useDate = () => {
   const handleDate = useCallback((date: string | null | undefined) => {
-    if (date === undefined) {
-      return undefined;
-    }
-
-    if (date === null) {
-      return '-';
-    }
+    if (!date) return '-';
     const index = date.indexOf('T');
     const newDate = date.slice(0, index);
     return newDate.replaceAll('-', '/');
   }, []);
 
   const handleTime = useCallback((date: string | null | undefined) => {
-    if (date === undefined) {
-      return undefined;
-    }
-
-    if (date === null) {
-      return '-';
-    }
+    if (!date) return '-';
     const tIndex = date.indexOf('T');
     const plusIndex = date.indexOf('.');
     const newDate = date.slice(0, tIndex);
