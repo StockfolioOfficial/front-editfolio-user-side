@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useHistory } from 'react-router';
 import useInput from 'hooks/useInputs';
 import useValidate from 'hooks/useValidate';
-import FetchData from '../../../service/fetch';
+import FetchData, { LoginValueType } from '../../../service/fetch';
 
 const LoginForm = () => {
   const { values, handleChange, handleSubmit, reset } = useInput({
@@ -18,21 +18,21 @@ const LoginForm = () => {
   const history = useHistory();
 
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     handleError();
     if (!isValid) {
-      e.preventDefault();
       reset();
       return;
     }
-    e.preventDefault();
-    handleSubmit(async () => {
-      const res = await fetch.login(values);
 
-      if (!res.token) {
+    handleSubmit(async (submitValue: LoginValueType) => {
+      const res = await fetch.login(submitValue);
+
+      if (!res) {
         handleFailed();
         return;
       }
-      localStorage.setItem('edit-token', res.token);
+      localStorage.setItem('editfolio-token', res);
       alert('환영합니다.');
       history.push('/main');
     });

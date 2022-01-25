@@ -22,7 +22,7 @@ export interface OrderModal {
 class FetchData {
   login = async (values: LoginValueType) => {
     try {
-      const tokenData = await fetch(`${BASE_URL}/sign-in`, {
+      const { token } = await fetch(`${BASE_URL}/sign-in`, {
         method: 'POST',
         headers: {
           'Content-type': 'application/json',
@@ -31,12 +31,18 @@ class FetchData {
           username: values.email,
           password: values.phone.replaceAll('-', ''),
         }),
-      }).then((res) => res.json());
-      return tokenData as TokenDataType;
+      }).then<TokenDataType>((res) => res.json());
+      return token;
     } catch {
       console.error('로그인 터짐');
-      return {};
+      return null;
     }
+  };
+
+  checkLogin = () => {
+    const token = localStorage.getItem('editfolio-token');
+    if (!token) return null;
+    return token;
   };
 
   requirement = async (requirement: string) => {
@@ -44,7 +50,9 @@ class FetchData {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('edit-token')}` as string,
+        Authorization: `Bearer ${localStorage.getItem(
+          'editfolio-token',
+        )}` as string,
       },
       body: JSON.stringify({
         requirement,
@@ -73,9 +81,11 @@ class FetchData {
       method: 'GET',
       headers: {
         'Content-type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('edit-token')}` as string,
+        Authorization: `Bearer ${localStorage.getItem(
+          'editfolio-token',
+        )}` as string,
       },
-    }).then((res) => res.json());
+    }).then<UserData | undefined>((res) => res.json());
     return userRes;
   };
 
@@ -84,7 +94,9 @@ class FetchData {
       method: `POST`,
       headers: {
         'Content-type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('edit-token')}` as string,
+        Authorization: `Bearer ${localStorage.getItem(
+          'editfolio-token',
+        )}` as string,
       },
     });
   };
@@ -95,7 +107,7 @@ class FetchData {
   //     method: 'GET',
   //     headers: {
   //       'Content-type': 'application/json',
-  //       Authorization: `Bearer${localStorage.getItem('edit-token')}` as string,
+  //       Authorization: `Bearer${localStorage.getItem('editfolio-token')}` as string,
   //     },
   //   }).then((res) => res.json());
   // };
@@ -106,7 +118,7 @@ class FetchData {
   //     method: 'GET',
   //     headers: {
   //       'Content-type': 'application/json',
-  //       Authorization: `Bearer${localStorage.getItem('edit-token')}` as string,
+  //       Authorization: `Bearer${localStorage.getItem('editfolio-token')}` as string,
   //     },
   //   }).then((res) => res.json());
   // };
@@ -116,7 +128,9 @@ class FetchData {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
-        Authorization: `Bearer${localStorage.getItem('edit-token')}` as string,
+        Authorization: `Bearer${localStorage.getItem(
+          'editfolio-token',
+        )}` as string,
       },
     }).then((res) => res.json());
   };
