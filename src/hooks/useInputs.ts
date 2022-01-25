@@ -17,7 +17,7 @@ const useInput = (initialValues: ValuesObjType) => {
 
   const handleSubmit = useCallback(
     (submitAction) => {
-      submitAction();
+      submitAction(values);
     },
     [values],
   );
