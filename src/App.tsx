@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-import Login from './components/pages/Login/Login';
-import Proceeding from './components/pages/Proceeding/Proceeding';
-import Request from './components/pages/Request/Request';
+import Login from './components/pages/Login';
+import Proceeding from './components/pages/Proceeding';
+import Request from './components/pages/Request';
 
 function App(): JSX.Element {
   return (

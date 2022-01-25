@@ -1,8 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import LoginForm from './LoginForm';
+import LoginForm from './Login/LoginForm';
 
 const Login = () => {
+  const history = useHistory();
+
+  useEffect(() => {
+    const token = localStorage.getItem('editfolio-token');
+    if (!token) return;
+    history.push('/main');
+  }, []);
+
   return (
     <Background>
       <Container>

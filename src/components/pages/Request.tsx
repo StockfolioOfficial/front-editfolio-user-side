@@ -7,12 +7,12 @@ import useStore from 'hooks/useStore';
 import usePermission from 'hooks/usePermission';
 import ModalForm from 'components/modals/ModalForm';
 import Portal from 'components/modals/Portal';
-import CheckedUpload from './CheckedUpload';
-import Complete from './Complete';
-import RequestHeader from './RequestHeader';
-import Requirement from './Requirement';
-import Step from './Step';
-import Upload from './Upload';
+import CheckedUpload from './Request/CheckedUpload';
+import Complete from './Request/Complete';
+import RequestHeader from './Request/RequestHeader';
+import Requirement from './Request/Requirement';
+import Step from './Request/Step';
+import Upload from './Request/Upload';
 
 interface ParamsType {
   oneDriveLink: string | undefined;
