@@ -11,8 +11,15 @@ const PNotice = () => {
       </FooterTitle>
       <NoticeTitle># 유의사항</NoticeTitle>
       <NoticeBox>
-        {NOTICELIST.map((word) => (
-          <NoticeList key={word}>{word}</NoticeList>
+        {NOTICELIST.map((notice) => (
+          <NoticeList key={notice}>
+            {notice.split('\n').map((word, i) => (
+              <>
+                {i !== 0 && <br />}
+                {word}
+              </>
+            ))}
+          </NoticeList>
         ))}
       </NoticeBox>
     </>
@@ -37,7 +44,7 @@ const NoticeTitle = styled.p`
 `;
 
 const NoticeBox = styled.ul`
-  margin-top: 8px;
+  margin: 8px 0 0 4px;
   padding-left: 1em;
 `;
 
@@ -51,8 +58,7 @@ const NoticeList = styled.li`
 export default PNotice;
 
 const NOTICELIST: string[] = [
-  `완료 후 2일이 지나면 의뢰건이 자동적으로 종료됩니다.
-결과물을 확인하시고 수정 요청을 하거나 수정사항 없음을 눌러주세요.`,
+  `완료 후 2일이 지나면 의뢰건이 자동적으로 종료됩니다.\r\n 결과물을 확인하시고 수정 요청을 하거나 수정사항 없음을 눌러주세요.`,
   `최대 수정 가능 횟수는 2회 입니다.`,
   `기본 2회 수정 이후 추가 수정이 필요하신 경우 추가 결제를 통한 수정이 이루어집니다.`,
 ];

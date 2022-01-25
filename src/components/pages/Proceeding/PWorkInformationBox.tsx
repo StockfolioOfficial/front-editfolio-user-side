@@ -31,7 +31,7 @@ const PWorkInformationBox = ({
       <WorkInformationTitle>
         <Title>작업정보</Title>
         <Refresh>
-          <RefreshButton
+          <RefreshSvgMain
             isSpin={isSpin}
             onClick={() => {
               if (isSpin) return;
@@ -62,19 +62,19 @@ const PWorkInformationBox = ({
 const WorkInformationBox = styled.div`
   display: flex;
   flex-direction: column;
+  margin-top: 24px;
 `;
 
 const WorkInformationTitle = styled.div`
   display: flex;
   justify-content: space-between;
-  height: 34px;
-  margin-top: 24px;
 `;
 
-const Title = styled.span`
+const Title = styled.p`
+  margin-left: 12px;
   font-size: 16px;
-  line-height: 24px;
   font-weight: 700;
+  line-height: 24px;
 `;
 
 const rotation = keyframes`
@@ -88,10 +88,14 @@ const rotation = keyframes`
 
 `;
 
-const Refresh = styled.div``;
-
-const RefreshButton = styled(RefreshSvg)<refresh>`
+const Refresh = styled.button`
+  display: flex;
+  margin-right: 12px;
+  padding: 4px;
   cursor: pointer;
+`;
+
+const RefreshSvgMain = styled(RefreshSvg)<refresh>`
   animation: ${({ isSpin }) =>
     isSpin &&
     css`
@@ -103,6 +107,7 @@ const WorkInformation = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  margin-top: 12px;
   padding: 22px 16px;
   background-color: #ffffff;
   border-radius: 6px;

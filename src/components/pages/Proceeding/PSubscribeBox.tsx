@@ -33,16 +33,13 @@ const PSubscribeBox = ({ start, end, orderedCnt }: SubscriptProps) => {
 const SubscribeBox = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 336px;
-  height: 40px;
-  margin: 0 12px;
+  padding: 10px 16px;
 `;
 
 const Subscribe = styled.div`
   display: flex;
   width: 60px;
   height: 20px;
-  margin: 10px 0 20px 16px;
   color: #77828b;
   font-size: 13px;
   font-weight: 400;
@@ -51,7 +48,6 @@ const Subscribe = styled.div`
 
 const SubscribeDate = styled.div`
   height: 20px;
-  margin: 10px 16px 10px 0;
   color: #232628;
   font-size: 13px;
   font-weight: 400;
@@ -62,13 +58,12 @@ const NumberOfVideoBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 16px 12px 0;
+  padding: 14px 0;
   font-size: 13px;
-  font-weight: 400;
-  width: 312px;
-  height: 48px;
-  border-radius: 16px;
-  margin: 16px 24px 0 24px;
+  font-weight: 500;
   background-color: rgb(238, 239, 249);
+  border-radius: 16px;
 
   > span {
     color: #5d4ee8;

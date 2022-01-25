@@ -24,23 +24,21 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 60px 0 32px;
+  margin: 60px 0;
 `;
 
 const Description = styled.p`
-  margin-bottom: 12px;
   color: ${({ theme }) => theme.color.darkGray};
   font-size: 18px;
   font-weight: 700;
-  line-height: 1.4444444444;
+  line-height: 26px;
   text-align: center;
 `;
 
 const SubDescription = styled.p`
-  margin-bottom: 60px;
   color: ${({ theme }) => theme.color.gray};
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 18px;
   text-align: center;
 `;
 

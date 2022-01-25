@@ -17,15 +17,17 @@ const PNoRequest = ({ cloudLink, orderedCnt }: PNoRequestProps) => {
   };
 
   return (
-    <NoRequest>
-      <NoProceedingText>진행 중인 영상제작 의뢰가 없습니다.</NoProceedingText>
-      <StateProceedingText>
-        아래 제작 의뢰를 눌러 영상편집 의뢰를 시작하세요.
-      </StateProceedingText>
+    <>
+      <NoRequest>
+        <NoProceedingText>진행 중인 영상제작 의뢰가 없습니다.</NoProceedingText>
+        <StateProceedingText>
+          아래 제작 의뢰를 눌러 영상편집 의뢰를 시작하세요.
+        </StateProceedingText>
+      </NoRequest>
       {orderedCnt && orderedCnt > 0 && (
         <RequestButton onClick={goToRequest}>제작 의뢰</RequestButton>
       )}
-    </NoRequest>
+    </>
   );
 };
 
@@ -35,9 +37,7 @@ PNoRequest.defaultProps = {
 };
 
 const NoRequest = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin: 60px 0 32px;
+  padding: 60px 0;
 `;
 
 const NoProceedingText = styled.div`
@@ -51,7 +51,6 @@ const NoProceedingText = styled.div`
 
 const StateProceedingText = styled.div`
   height: 18px;
-  margin-bottom: 58px;
   font-size: 12px;
   font-weight: 400;
   line-height: 18px;
@@ -60,6 +59,7 @@ const StateProceedingText = styled.div`
 `;
 
 const RequestButton = styled.button`
+  width: 100%;
   height: 48px;
   background-color: #5d4ee8;
   border-radius: 6px;

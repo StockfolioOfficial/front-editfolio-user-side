@@ -26,12 +26,11 @@ const PLoginBox = ({ name }: Login) => {
   );
 };
 
-const LoginBox = styled.div`
+const LoginBox = styled.section`
   display: flex;
   justify-content: space-between;
-  width: 360px;
-  height: 88px;
-  margin-bottom: 16px;
+  align-items: center;
+  padding: 22px 28px;
   background-color: ${(props) => props.theme.color.purple};
 `;
 
@@ -40,7 +39,6 @@ const LoginText = styled.div`
   font-size: 14px;
   color: #ffffff;
   line-height: 22px;
-  margin: 22px 0 44px 28px;
 `;
 
 const LoginBtn = styled.button`
@@ -48,7 +46,6 @@ const LoginBtn = styled.button`
   justify-content: center;
   width: 64px;
   height: 26px;
-  margin: 31px 24px 0 31px;
   align-items: center;
   border: none;
   border-radius: 6px;

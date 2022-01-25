@@ -31,15 +31,17 @@ const PWorkStatusBox = ({ links, content, emoji }: WorkStatusBoxProps) => {
             : '고객님의 영상을 기다리는 중이에요.'}
         </WorkStatus>
       </WorkStatusBox>
-      {isNoLink ? (
-        <LinkUploadButton type="button" onClick={() => goUploadLink()}>
-          영상 업로드
-        </LinkUploadButton>
-      ) : (
-        <MoreLinkButton type="button" onClick={() => goUploadLink()}>
-          편집자에게 더 보내줄 영상이 있으신가요?
-        </MoreLinkButton>
-      )}
+      <ButtonWrap>
+        {isNoLink ? (
+          <LinkUploadButton type="button" onClick={() => goUploadLink()}>
+            영상 업로드
+          </LinkUploadButton>
+        ) : (
+          <MoreLinkButton type="button" onClick={() => goUploadLink()}>
+            편집자에게 더 보내줄 영상이 있으신가요?
+          </MoreLinkButton>
+        )}
+      </ButtonWrap>
     </Root>
   );
 };
@@ -60,8 +62,6 @@ const Title = styled.div`
 `;
 
 const WorkStatusBox = styled.div`
-  display: flex;
-  flex-direction: column;
   padding: 32px 0;
   border-radius: 16px;
   background-color: #ffffff;
@@ -74,14 +74,18 @@ const Emogi = styled.p`
 `;
 
 const WorkStatus = styled.p`
-  height: 44px;
   font-size: 14px;
   font-weight: 700;
   line-height: 22px;
   color: #5d4ee8;
 `;
 
+const ButtonWrap = styled.div`
+  display: flex;
+`;
+
 const LinkUploadButton = styled.button`
+  width: 100%;
   margin-top: 16px;
   padding: 13px 0;
   background-color: #5d4ee8;
@@ -95,10 +99,12 @@ const LinkUploadButton = styled.button`
 
 const MoreLinkButton = styled.button`
   margin-top: 24px;
+  margin-left: auto;
+  padding: 6px 0;
   font-size: 13px;
   line-height: 20px;
   color: #2ec7a2;
-  text-decoration-line: underline;
+  text-decoration: underline;
 `;
 
 export default PWorkStatusBox;

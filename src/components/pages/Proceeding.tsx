@@ -17,10 +17,6 @@ import PWorkStatusBox from './Proceeding/PWorkStatusBox';
 import ModalForm from '../modals/ModalForm';
 import Portal from '../modals/Portal';
 
-interface backgroundProps {
-  isLong: boolean;
-}
-
 const initProcessing = {
   orderId: '',
   orderState: 0,
@@ -104,7 +100,7 @@ const Proceeding = () => {
 
   const SubcribeBox = () => {
     return (
-      <>
+      <SubcribeBoxMain>
         <PSubscribeBox
           start={handleDate(user.subscribeStart)}
           end={handleDate(user.subscribeEnd)}
@@ -145,7 +141,7 @@ const Proceeding = () => {
             orderedCnt={user.remainingOrderCount}
           />
         )}
-      </>
+      </SubcribeBoxMain>
     );
   };
 
@@ -155,7 +151,7 @@ const Proceeding = () => {
   }, []);
 
   return (
-    <Background isLong={processing.orderState > 3}>
+    <>
       <Container>
         <Header>
           <img src="./images/Logo.png" alt="editfolio" />
@@ -173,16 +169,9 @@ const Proceeding = () => {
             </Portal>
           ),
       )}
-    </Background>
+    </>
   );
 };
-
-const Background = styled.div<backgroundProps>`
-  width: 100%;
-  min-height: 100vh;
-  position: relative;
-  background-color: #dee4ed;
-`;
 
 const Container = styled.div`
   display: flex;
@@ -201,11 +190,10 @@ const Main = styled.main`
   min-height: calc(100vh - 60px);
   padding-bottom: 60px;
   background-color: rgb(246, 248, 250);
+`;
 
-  > div,
-  > section {
-    padding: 0 12px;
-  }
+const SubcribeBoxMain = styled.section`
+  padding: 16px 12px 0;
 `;
 
 const EditSection = styled.section`
