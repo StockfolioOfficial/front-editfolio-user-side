@@ -1,16 +1,11 @@
 import React from 'react';
+import { modalContent } from 'stores/modal';
 import styled from 'styled-components';
 import useStore from '../../hooks/useStore';
 
 interface buttonProps {
   color: 'purple' | 'white';
   hoverColor: '#EEEEEE' | '#4739C1';
-}
-
-interface modalContent {
-  description: string;
-  subDescription: string;
-  actionButton?: () => void;
 }
 
 interface modalProps {
@@ -35,7 +30,7 @@ const ModalForm = ({ content }: modalProps) => {
         </SubDescriptionBox>
         <ButtonBox>
           <Button color="white" hoverColor="#EEEEEE" onClick={onClose}>
-            아니오
+            아니오
           </Button>
           <Button color="purple" hoverColor="#4739C1" onClick={actionButton}>
             예

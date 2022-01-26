@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useObserver } from 'mobx-react-lite';
 import styled from 'styled-components';
 import { useHistory, useLocation } from 'react-router';
 import useInputs from 'hooks/useInputs';
-import useStore from 'hooks/useStore';
 import usePermission from 'hooks/usePermission';
-import ModalForm from 'components/modals/ModalForm';
-import Portal from 'components/modals/Portal';
 import CheckedUpload from './Request/CheckedUpload';
 import Complete from './Request/Complete';
 import RequestHeader from './Request/RequestHeader';
@@ -27,8 +23,6 @@ const Request = () => {
   });
 
   const { checkToken } = usePermission();
-
-  const { modal } = useStore();
 
   const history = useHistory();
   const { state } = useLocation<ParamsType>();
@@ -52,10 +46,6 @@ const Request = () => {
   }
 
   const handleNextStep = () => {
-    if (step === 2 && values.requirement.length === 0) {
-      modal.openModal();
-      return;
-    }
     let isStop = false;
     if (step === 1) {
       isStop = !openOneDrive();
@@ -104,14 +94,6 @@ const Request = () => {
     ),
   };
 
-  const MODAL = {
-    description: '요구사항 없이 편집합니다.',
-    subDescription: '*의뢰인의 의도와 상관없이\n 영상이 제작될 수 있습니다',
-    actionButton: () => {
-      const nextStep = step === 1 ? 2 : 3;
-      setStep(nextStep);
-      modal.closeModal();
-    },
   };
 
   return (
@@ -125,14 +107,6 @@ const Request = () => {
           </>
         ) : (
           <Complete />
-        )}
-        {useObserver(
-          () =>
-            modal.isShow && (
-              <Portal>
-                <ModalForm content={MODAL} />
-              </Portal>
-            ),
         )}
       </Container>
     </Background>
