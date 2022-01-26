@@ -1,26 +1,51 @@
-import React from 'react';
+import useStore from 'hooks/useStore';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 interface requireProps {
-  requirement: string;
+  initRequirement: string;
   handleNextStep: () => void;
-  handleChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  handleChange: (value: string) => void;
 }
 
 const Requirement = ({
+  initRequirement,
   handleNextStep,
   handleChange,
-  requirement,
 }: requireProps) => {
+  const [requirement, setRequirement] = useState(initRequirement);
+  const { modal } = useStore();
+  const { setContent } = modal;
+
+  function goNext() {
+    handleNextStep();
+    handleChange(requirement);
+  }
+
   return (
     <>
       <RequirementText
         placeholder="자세하게 적어주실수록 영상의 퀄리티가 올라갑니다."
-        onChange={handleChange}
+        onChange={(e) => setRequirement(e.currentTarget.value)}
         value={requirement}
         name="requirement"
       />
-      <Button onClick={handleNextStep}>다음</Button>
+      <Button
+        onClick={() => {
+          if (requirement.length === 0) {
+            setContent({
+              description: '요구사항 없이 편집합니다.',
+              subDescription:
+                '*의뢰인의 의도와 상관없이\n영상이 제작될 수 있습니다.',
+              actionButton: goNext,
+            });
+            return;
+          }
+          goNext();
+        }}
+      >
+        다음
+      </Button>
     </>
   );
 };

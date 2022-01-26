@@ -9,15 +9,15 @@ interface headerProps {
 const RequestHeader = ({ handlePrevStep }: headerProps) => {
   return (
     <Container>
+      <Title>주문서</Title>
       <PrevBtn onClick={handlePrevStep}>
         <PrevIcon />
       </PrevBtn>
-      <Title>주문서</Title>
     </Container>
   );
 };
 
-const Container = styled.div`
+const Container = styled.header`
   position: relative;
   display: flex;
   justify-content: center;
@@ -27,18 +27,18 @@ const Container = styled.div`
   color: ${({ theme }) => theme.color.black};
 `;
 
-const PrevBtn = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 16px;
-  width: 24px;
-  height: 24px;
-  transform: translateY(-50%);
+const Title = styled.h2`
+  font-size: 18px;
+  font-weight: 700;
 `;
 
-const Title = styled.h1`
-  font-size: 18px;
-  line-height: 1.4444;
+const PrevBtn = styled.button`
+  width: 24px;
+  display: flex;
+  position: absolute;
+  left: 12px;
+  padding: 0;
+  order: -1;
 `;
 
 export default RequestHeader;

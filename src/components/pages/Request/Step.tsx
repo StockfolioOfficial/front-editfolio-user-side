@@ -36,7 +36,6 @@ const Container = styled.div`
   position: relative;
   height: 188px;
   margin-bottom: 24px;
-  padding: 0 16px;
   overflow: hidden;
 `;
 
@@ -44,7 +43,7 @@ const Cover = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  width: 360px;
+  width: 100%;
   height: 60px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   transform: rotate(-180deg);
@@ -52,7 +51,7 @@ const Cover = styled.div`
 `;
 
 const StepList = styled.ul<stepProps>`
-  margin-top: 56px;
+  margin-top: 48px;
   transform: ${({ step }) => `translateY(-${(step - 1) * 80}px)`};
   transition: transform 600ms cubic-bezier(0, 0, 0.67, 0.28);
 `;
@@ -66,7 +65,7 @@ const ReverseCover = styled.div`
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 360px;
+  width: 100%;
   height: 100px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   z-index: 1;
