@@ -4,6 +4,7 @@ export interface modalContent {
   description: string;
   subDescription: string;
   actionButton?: () => void;
+  isOnlyOk?: boolean;
 }
 
 const modal = observable({
@@ -12,7 +13,6 @@ const modal = observable({
   modalContent: {
     description: '',
     subDescription: '',
-    actionButton: () => undefined,
   } as modalContent,
 
   openModal() {

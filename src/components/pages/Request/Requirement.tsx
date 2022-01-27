@@ -15,7 +15,6 @@ const Requirement = ({
 }: requireProps) => {
   const [requirement, setRequirement] = useState(initRequirement);
   const { modal } = useStore();
-  const { setContent } = modal;
 
   function goNext() {
     handleNextStep();
@@ -33,7 +32,7 @@ const Requirement = ({
       <Button
         onClick={() => {
           if (requirement.length === 0) {
-            setContent({
+            modal.setContent({
               description: '요구사항 없이 편집합니다.',
               subDescription:
                 '*의뢰인의 의도와 상관없이\n영상이 제작될 수 있습니다.',

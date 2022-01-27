@@ -4,7 +4,6 @@ import { useObserver } from 'mobx-react-lite';
 import useDate from 'hooks/useDate';
 import useStore from 'hooks/useStore';
 import usePermission from 'hooks/usePermission';
-import { useHistory } from 'react-router-dom';
 import FetchData, { OrderModal, UserData } from '../../service/fetch';
 import Expiration from './Proceeding/Expiration';
 import PBtnBox from './Proceeding/PBtnBox';
@@ -38,8 +37,6 @@ const initUserData = {
 };
 
 const Proceeding = () => {
-  const history = useHistory();
-
   const init = useRef(true);
 
   const [processing, setProcessing] = useState<OrderModal>(initProcessing);
@@ -63,21 +60,9 @@ const Proceeding = () => {
   };
 
   const checkLogin = () => {
-    if (!checkToken()) {
-      history.push('/');
-      return;
-    }
-    if (init.current) fetchData();
+    const res = checkToken();
+    if (res) fetchData();
   };
-
-  useEffect(() => {
-    document.addEventListener('visibilitychange', checkLogin);
-    checkLogin();
-    init.current = false;
-    return () => {
-      document.removeEventListener('visibilitychange', checkLogin);
-    };
-  }, []);
 
   async function clickRequestEdit() {
     await requestEdit();
@@ -146,8 +131,11 @@ const Proceeding = () => {
   };
 
   useEffect(() => {
-    if (localStorage.getItem('editfolio-token')) return;
-    history.push('/');
+    console.log(init.current);
+    checkLogin();
+    document.addEventListener('visibilitychange', checkLogin);
+    if (init.current) init.current = false;
+    return () => document.removeEventListener('visibilitychange', checkLogin);
   }, []);
 
   return (
@@ -174,9 +162,10 @@ const Proceeding = () => {
 };
 
 const Container = styled.div`
+  width: 360px;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  width: 360px;
   margin: 0 auto;
 `;
 

@@ -14,7 +14,7 @@ interface modalProps {
 
 const ModalForm = ({ content }: modalProps) => {
   const { modal } = useStore();
-  const { description, subDescription, actionButton } = content;
+  const { description, subDescription, actionButton, isOnlyOk } = content;
   const onClose = () => {
     modal.closeModal();
   };
@@ -24,17 +24,31 @@ const ModalForm = ({ content }: modalProps) => {
       <Container>
         <Description>{description}</Description>
         <SubDescriptionBox>
-          {subDescription.split('\n').map((word) => (
-            <SubDescription key={word}>{word}</SubDescription>
-          ))}
+          <SubDescription>
+            {subDescription.split('\n').map((word) => (
+              <>{word}</>
+            ))}
+          </SubDescription>
         </SubDescriptionBox>
         <ButtonBox>
-          <Button color="white" hoverColor="#EEEEEE" onClick={onClose}>
-            아니오
-          </Button>
-          <Button color="purple" hoverColor="#4739C1" onClick={actionButton}>
-            예
-          </Button>
+          {!isOnlyOk ? (
+            <>
+              <Button color="white" hoverColor="#EEEEEE" onClick={onClose}>
+                아니오
+              </Button>
+              <Button
+                color="purple"
+                hoverColor="#4739C1"
+                onClick={actionButton}
+              >
+                예
+              </Button>
+            </>
+          ) : (
+            <Button color="purple" hoverColor="#4739C1" onClick={actionButton}>
+              확인
+            </Button>
+          )}
         </ButtonBox>
       </Container>
     </Background>
@@ -51,20 +65,24 @@ const Background = styled.div`
 `;
 
 const Container = styled.div`
+  width: 312px;
   position: fixed;
   top: 50%;
   left: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 312px;
   background-color: ${({ theme }) => theme.color.white};
   border-radius: 6px;
+  overflow: hidden;
   transform: translate(-50%, -50%);
 `;
 
 const Description = styled.p`
   margin: 48px 12px 16px 12px;
+  text-align: center;
+`;
+
+const SubDescriptionBox = styled.div`
+  margin-bottom: 43px;
+  padding: 0 12px;
 `;
 
 const SubDescription = styled.p`
@@ -72,22 +90,19 @@ const SubDescription = styled.p`
   font-size: 11px;
   line-height: 1.4545454545;
   text-align: center;
-`;
-
-const SubDescriptionBox = styled.div`
-  margin-bottom: 43px;
+  word-break: break-all;
 `;
 
 const ButtonBox = styled.div`
   width: 100%;
+  display: flex;
 `;
 
 const Button = styled.button<buttonProps>`
-  width: 50%;
+  width: 100%;
   padding: 13px 0;
   background-color: ${({ theme, color }) => theme.color[color]};
   border-top: 1px solid ${({ theme }) => theme.color.stone};
-  border-radius: 0 0 ${({ color }) => (color === 'purple' ? '6px 0' : '0 6px')};
   color: ${({ theme, color }) =>
     color === 'purple' ? theme.color.white : theme.color.black};
   font-size: 14px;

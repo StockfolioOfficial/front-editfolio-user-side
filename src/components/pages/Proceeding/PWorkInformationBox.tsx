@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled, { keyframes, css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import { ReactComponent as RefreshSvg } from '../../../assets/styles/refresh.svg';
 
 interface PWorkInformationProps {
@@ -9,7 +9,7 @@ interface PWorkInformationProps {
   refresh: () => void;
 }
 
-interface refresh {
+interface RefreshButtonProps {
   isSpin: boolean;
 }
 
@@ -22,23 +22,20 @@ const PWorkInformationBox = ({
   const [isSpin, setSpin] = useState<boolean>(false);
   const spinner = () => {
     setSpin(true);
-    setTimeout(() => {
-      setSpin(false);
-    }, 2000);
   };
   return (
     <WorkInformationBox>
       <WorkInformationTitle>
         <Title>작업정보</Title>
-        <Refresh>
-          <RefreshSvgMain
-            isSpin={isSpin}
-            onClick={() => {
-              if (isSpin) return;
-              refresh();
-              spinner();
-            }}
-          />
+        <Refresh
+          isSpin={isSpin}
+          onClick={() => {
+            if (isSpin) return;
+            refresh();
+            spinner();
+          }}
+        >
+          <RefreshSvg />
         </Refresh>
       </WorkInformationTitle>
       <WorkInformation>
@@ -88,19 +85,19 @@ const rotation = keyframes`
 
 `;
 
-const Refresh = styled.button`
+const Refresh = styled.button<RefreshButtonProps>`
   display: flex;
   margin-right: 12px;
   padding: 4px;
   cursor: pointer;
-`;
 
-const RefreshSvgMain = styled(RefreshSvg)<refresh>`
-  animation: ${({ isSpin }) =>
-    isSpin &&
-    css`
-      ${rotation} 0.7s infinite linear
-    `};
+  > svg {
+    animation: ${({ isSpin }) =>
+      isSpin &&
+      css`
+        ${rotation} 0.7s infinite linear
+      `};
+  }
 `;
 
 const WorkInformation = styled.div`
