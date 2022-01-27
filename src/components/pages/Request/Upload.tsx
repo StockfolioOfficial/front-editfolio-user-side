@@ -13,9 +13,36 @@ interface uploadProps {
 const Upload = ({ handleNextStep, links, setLinks }: uploadProps) => {
   const { modal } = useStore();
   const [readyUpload, setReady] = useState<boolean>(false);
-  const [uploadLinks, setUploadLinks] = useState<string[]>(
-    links.length > 0 ? links : [''],
-  );
+  const [uploadLinks, setUploadLinks] = useState<string[]>(links);
+
+  async function addFileLinks() {
+    let clip: undefined | string = '';
+    try {
+      clip = await navigator.clipboard.readText();
+    } catch (err) {
+      clip = undefined;
+    }
+    const urlReg =
+      /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
+    console.log(clip, urlReg, clip && !urlReg.test(clip), modal.closeModal);
+    if (!clip || (clip && !urlReg.test(clip)))
+      modal.setContent({
+        description: '알 수 없는 링크에요.',
+        subDescription: '복사한 주소를 확인 후\n다시 시도해보세요.',
+        actionButton: () => modal.closeModal(),
+        isOnlyOk: true,
+      });
+    else
+      modal.setContent({
+        description: '붙여넣기 할까요?',
+        subDescription: clip || '',
+        actionButton: () => {
+          if (clip) setUploadLinks([...uploadLinks, clip]);
+          modal.closeModal();
+        },
+      });
+    modal.openModal();
+  }
 
   return (
     <>
@@ -61,19 +88,9 @@ const Upload = ({ handleNextStep, links, setLinks }: uploadProps) => {
                     <FileLinkLabel htmlFor={`파일 #${i + 1}`}>
                       파일 #{i + 1}
                     </FileLinkLabel>
-                    <FileLinkInput
-                      type="text"
-                      id={`파일 #${i + 1}`}
-                      value={link}
-                      onChange={(e) =>
-                        setUploadLinks(
-                          uploadLinks.map((upload, ui) =>
-                            ui === i ? e.currentTarget.value : upload,
-                          ),
-                        )
-                      }
-                      placeholder="파일의 링크를 입려해주세요."
-                    />
+                    <FileLinkAnchor href={link} target="_blank">
+                      {link}
+                    </FileLinkAnchor>
                     <FileLinkRemoveButton
                       type="button"
                       title="파일 링크 삭제 버튼"
@@ -82,10 +99,12 @@ const Upload = ({ handleNextStep, links, setLinks }: uploadProps) => {
                           description: '파일 링크를 삭제할까요',
                           subDescription:
                             '파일의 수정은 삭제 후\n링크를 추가해주세요.',
-                          actionButton: () =>
+                          actionButton: () => {
                             setUploadLinks(
                               uploadLinks.filter((_, ui) => ui !== i),
-                            ),
+                            );
+                            modal.closeModal();
+                          },
                         });
                         modal.openModal();
                       }}
@@ -95,10 +114,7 @@ const Upload = ({ handleNextStep, links, setLinks }: uploadProps) => {
                   </li>
                 ))}
               </FileLinkList>
-              <AddLinkInputButton
-                type="button"
-                onClick={() => setUploadLinks([...uploadLinks, ''])}
-              >
+              <AddLinkInputButton type="button" onClick={() => addFileLinks()}>
                 <AddIcon />
                 <br />
                 링크 추가하기
@@ -235,22 +251,27 @@ const FileLinkLabel = styled.label`
   color: ${({ theme }) => theme.color.gray};
 `;
 
-const FileLinkInput = styled.input`
+const FileLinkAnchor = styled.a`
   ${({ theme }) => css`
-    color: ${theme.color.black};
     background: ${theme.color.white};
+    color: ${theme.color.darkGray};
     border: 1px solid ${theme.color.stone};
+  `};
 
-    &::placeholder {
-      color: ${theme.color.paleBlue};
-    }
-  `}
-
+  display: block;
   width: 100%;
-  padding: 13px 48px 13px 12px;
-  font-size: 13px;
-  line-height: 20px;
+  margin-bottom: 0;
+  padding: 14px 48px 14px 12px;
+  font-weight: 500;
   border-radius: 6px;
+
+  > span {
+    width: 100%;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 `;
 
 const FileLinkRemoveButton = styled.button`

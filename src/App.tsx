@@ -8,6 +8,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Login from './components/pages/Login';
 import Proceeding from './components/pages/Proceeding';
 import Request from './components/pages/Request';
+import UploadLink from './components/pages/UploadLink';
 
 const Modal = () => {
   const { modal } = useStore();
@@ -30,6 +31,7 @@ function App(): JSX.Element {
         <Route exact path="/" component={Login} />
         <Route exact path="/main" component={Proceeding} />
         <Route exact path="/request" component={Request} />
+        <Route exact path="/upload-link" component={UploadLink} />
       </Switch>
       <Modal />
     </BrowserRouter>
