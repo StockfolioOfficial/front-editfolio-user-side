@@ -53,16 +53,14 @@ const SubTitle = styled.p`
   margin-bottom: 2px;
   color: ${({ theme }) => theme.color.gray};
   font-size: 14px;
-  font-weight: 400;
-  line-height: 22px;
+  line-height: 1.5714285714;
   letter-spacing: 0.2px;
 `;
 
 const Title = styled.p`
   margin-bottom: 60px;
   font-size: 24px;
-  font-weight: 700;
-  line-height: 34px;
+  line-height: 1.4166666667;
   letter-spacing: 0.2px;
 `;
 

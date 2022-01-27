@@ -72,8 +72,6 @@ button {
   border: none;
   outline: none;
   background: transparent;
-}
-button {
   cursor: pointer;
 }
 a {

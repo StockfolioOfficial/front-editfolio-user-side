@@ -6,18 +6,13 @@ declare module 'styled-components' {
 
     color: {
       purple: string;
-      deepPurple: string;
-      grayPurple: string;
       violet: string;
       skyblue: string;
-      deepSkyblue: string;
-      graySkyblue: string;
       mint: string;
-      deepMint: string;
-      grayMint: string;
       black: string;
       darkGray: string;
       gray: string;
+      paleBlue: string;
       paleBlue: string;
       stone: string;
       white: string;

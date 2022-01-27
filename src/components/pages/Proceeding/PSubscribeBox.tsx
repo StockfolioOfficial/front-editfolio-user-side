@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import Exhaustion from './Expiration';
 
 interface SubscriptProps {
   start: string | undefined;
@@ -13,19 +12,15 @@ const PSubscribeBox = ({ start, end, orderedCnt }: SubscriptProps) => {
     <>
       <SubscribeBox>
         <Subscribe>구독시작일</Subscribe>
-        <SubscribeDate>{start || '-'}</SubscribeDate>
+        <SubscribeDate>{start}</SubscribeDate>
       </SubscribeBox>
       <SubscribeBox>
         <Subscribe>구독종료일</Subscribe>
-        <SubscribeDate>{end || '-'}</SubscribeDate>
+        <SubscribeDate>{end}</SubscribeDate>
       </SubscribeBox>
-      {orderedCnt > 0 ? (
-        <NumberOfVideoBox>
-          영상편집 의뢰가능횟수가 <span>{orderedCnt}회</span> 남았습니다.
-        </NumberOfVideoBox>
-      ) : (
-        <Exhaustion />
-      )}
+      <NumberOfVideoBox>
+        영상편집 의뢰가능횟수가 <span>{orderedCnt}회</span> 남았습니다.
+      </NumberOfVideoBox>
     </>
   );
 };

@@ -5,28 +5,16 @@ import useStore from 'hooks/useStore';
 interface PDtnBoxProps {
   remainingEditCount?: number;
   requestEdit: () => void;
-  isEditing?: boolean;
 }
 
-const PBtnBox = ({
-  remainingEditCount,
-  requestEdit,
-  isEditing,
-}: PDtnBoxProps) => {
+const PBtnBox = ({ remainingEditCount, requestEdit }: PDtnBoxProps) => {
   const { modal } = useStore();
 
   return (
     <>
       <BtnBox>
-        <FixRequestBtn
-          onClick={() => requestEdit()}
-          disabled={
-            !remainingEditCount
-              ? true
-              : remainingEditCount < 0 || isEditing || false
-          }
-        >
-          수정 요청({remainingEditCount || 0})
+        <FixRequestBtn onClick={() => requestEdit()}>
+          수정 요청({remainingEditCount})
         </FixRequestBtn>
         <FixNoneBtn
           onClick={() => {
@@ -36,7 +24,7 @@ const PBtnBox = ({
           수정사항 없음
         </FixNoneBtn>
       </BtnBox>
-      <Additional href="https://editfolio.ai/shop_view/?idx=21" target="_blank">
+      <Additional href="https://editfolio.ai/shop_view/?idx=21" target="_self">
         추가 수정 결제
       </Additional>
     </>
@@ -45,7 +33,6 @@ const PBtnBox = ({
 
 PBtnBox.defaultProps = {
   remainingEditCount: 0,
-  isEditing: false,
 };
 
 const BtnBox = styled.div`
@@ -63,12 +50,6 @@ const FixRequestBtn = styled.button`
   color: #ffffff;
   font-size: 14px;
   background-color: #6ab4f7;
-
-  &:disabled {
-    background: ${({ theme }) => theme.color.graySkyblue};
-    color: ${({ theme }) => theme.color.stone};
-    cursor: default;
-  }
 `;
 
 const FixNoneBtn = styled.button`
@@ -82,16 +63,18 @@ const FixNoneBtn = styled.button`
 `;
 
 const Additional = styled.a`
-  height: 48px;
   display: flex;
+  text-align: center;
   justify-content: center;
-  align-items: center;
-  margin-top: 16px;
+  border: 1px solid #eeeeee;
+  width: 336px;
+  height: 48px;
   font-size: 14px;
   font-weight: 700;
-  border: 1px solid #eeeeee;
   border-radius: 6px;
   background-color: #ffffff;
+  margin: 16px 12px 60px 12px;
+  padding-top: 16px;
 `;
 
 export default PBtnBox;

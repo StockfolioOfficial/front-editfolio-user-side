@@ -68,8 +68,9 @@ const WorkInformationBox = styled.div`
 const WorkInformationTitle = styled.div`
   display: flex;
   justify-content: space-between;
+  width: 312px;
   height: 34px;
-  margin-top: 24px;
+  margin: 24px 24px 0 24px;
 `;
 
 const Title = styled.span`
@@ -103,9 +104,10 @@ const RefreshButton = styled(RefreshSvg)<refresh>`
 const WorkInformation = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 22px 16px;
   background-color: #ffffff;
+  width: 336px;
+  height: 144px;
+  margin: 0 12px 0 12px;
   border-radius: 6px;
 `;
 
@@ -116,12 +118,14 @@ const OrderBox = styled.div`
 
 const Order = styled.span`
   color: #77828b;
+  margin: 22px 0 0 16px;
   font-size: 13px;
   line-height: 20px;
   font-weight: 400;
 `;
 
 const OrderInfo = styled.span`
+  margin: 22px 16px 0 0;
   font-size: 13px;
   line-height: 20px;
   font-weight: 400;
